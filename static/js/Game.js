@@ -1,4 +1,4 @@
-cameraRotation = Math.PI;
+cameraRotation = -Math.PI;
 
 function Game() {
   var MyPlayer;
@@ -48,10 +48,10 @@ function Game() {
       var delta = clock.getDelta();
 
       if (MyPlayer) {
-        camera.position.z = 800 * Math.cos(cameraRotation) + MyPlayer.obj.position.z;
-        camera.position.x = 800 * Math.sin(cameraRotation) + MyPlayer.obj.position.x;
+        camera.position.z = 400 * Math.cos(cameraRotation) + MyPlayer.obj.position.z;
+        camera.position.x = 400 * Math.sin(cameraRotation) + MyPlayer.obj.position.x;
         camera.position.y = 300;
-        camera.lookAt(MyPlayer.obj.position);
+        camera.lookAt(MyPlayer.kula.sphere.position);
       }
 
       renderer.shadowMap.enabled = true
@@ -94,10 +94,12 @@ function Game() {
         MyPlayer.positionF();
       }
       if (ui.map[65]) { // obrót kamery w lewo: a
-
+            cameraRotation -= 0.02;
+            cameraRotation = Math.max(MyPlayer.obj.rotation.y - Math.PI * 1.25, Math.min(MyPlayer.obj.rotation.y - Math.PI * 0.75, cameraRotation));
       }
       if (ui.map[68]) { // obrót kamery w prawo: d
-        // cameraRotation += 0.02;
+            cameraRotation += 0.02;
+            cameraRotation = Math.max(MyPlayer.obj.rotation.y - Math.PI * 1.25, Math.min(MyPlayer.obj.rotation.y - Math.PI * 0.75, cameraRotation));
       }
       if (ui.map[32]) { // strzał: spacja
         // shot = true;
@@ -140,6 +142,7 @@ function Game() {
       for (var i = 0; i < data.length; i++) {
         Players[i] = new Armata(data[i]);
         scene.add((Players[i].obj));
+        scene.add(Players[i].kula.sphere)
         Players[i].positionF();
         Players[i].rotateF();
         Players[i].rotateLufaF();
@@ -152,6 +155,7 @@ function Game() {
           } else if ((x + 1) == Players.length) {
             Players[i] = new Armata(data[i]);
             scene.add((Players[i].obj));
+            scene.add(Players[i].kula.sphere)
             Players[i].positionF();
             Players[i].rotateF();
             Players[i].rotateLufaF();

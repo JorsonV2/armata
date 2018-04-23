@@ -7,18 +7,29 @@ function Armata(data) {
   this.rotate = data.rotateArmata;
   this.rotateL = data.rotateLufa;
   this.sprite = new makeTextSprite(this.name);
+  this.kula = new Kula();
 
   this.rotateF = function () {
     this.obj.rotation.y = this.rotate;
+    //console.log(this.rotate)
+    this.kulaPosition();
   }
 
   this.rotateLufaF = function () {
     this.lufa.rotation.z = this.rotateL;
+    this.kulaPosition();
   }
 
   this.positionF = function () {
     this.obj.position.set(this.x, 0, this.z);
+    this.kulaPosition();
   }
+
+  this.kulaPosition = function(){
+    this.kula.kulaPosition(this.lufa.rotation.z, this.obj.rotation.y, this.x, this.z);
+  }
+
+
 
   //  this.color = color;
 
@@ -33,10 +44,10 @@ function Armata(data) {
   })
 
   var geometry = new THREE.CylinderGeometry(25, 30, 200, 32);
-  geometry.translate(0, 80, 0);
   var lufa = new THREE.Mesh(geometry, material);
   lufa.rotateY(Math.PI / 2)
-  lufa.position.set(0, 60, 0);
+  lufa.position.y = 60;
+  geometry.translate(0, 80, 0);
   this.lufa = lufa;
 
   // var loader = new THREE.JSONLoader();
@@ -74,5 +85,8 @@ function Armata(data) {
 
 
   this.obj = container;
+  console.log(this.lufa.rotation.x)
+
+  this.kulaPosition();
 
 }

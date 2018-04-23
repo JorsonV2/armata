@@ -38,8 +38,16 @@ var element = document.body;
         rotateOBJ: rot
       }
       net.send(move);
+
       game.returnMyPlayer().obj.rotation.y -= movementX * 0.002; // zmiana rotacji playera
+
+      game.returnMyPlayer().lufa.rotation.z -= movementY * 0.002;
+      game.returnMyPlayer().lufa.rotation.z = Math.max(Math.PI * 0, Math.min(Math.PI * 0.5, game.returnMyPlayer().lufa.rotation.z));
+
+      game.returnMyPlayer().kulaPosition();
+
       cameraRotation -= movementX * 0.002; // zmiana rotacji kamery
+      cameraRotation = Math.max(game.returnMyPlayer().obj.rotation.y - Math.PI * 1.25, Math.min(game.returnMyPlayer().obj.rotation.y - Math.PI * 0.75, cameraRotation));
   }
 
   var pointerlockchange = function (event) {
