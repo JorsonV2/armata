@@ -10,7 +10,6 @@ function Armata(data) {
 
   this.rotateF = function () {
     this.obj.rotation.y = this.rotate;
-    console.log(this.sprite)
   }
 
   this.rotateLufaF = function () {
