@@ -1,0 +1,16 @@
+body{
+    margin: 0;
+    overflow: hidden;
+    text-align: center;
+}
+select{
+    border: 1px solid blue;
+    color: blue;
+}
+
+#pause{
+  position: absolute;
+  top: 45vh;
+  left: 45vw;
+  border: 2px solid black;
+}
