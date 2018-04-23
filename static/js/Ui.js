@@ -38,7 +38,6 @@ var element = document.body;
       var move = {
         rotateOBJ: rot
       }
-      console.log(1);
       net.send(move);
 
       cameraRotation -= movementX * 0.002; // zmiana rotacji kamery
