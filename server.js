@@ -106,8 +106,8 @@ var server = http.createServer(function(req, res) {
 
 server.listen(3000, function() {
   console.log("serwer startuje na porcie 3000")
- });
-//server.listen(3000, '192.168.100.106');
+});
+//server.listen(3000, '192.168.4.4');
 
 function Player(id, name) {
   this.id = id;
@@ -134,45 +134,45 @@ io.sockets.on("connection", function(client) {
   });
 
   //obsługa poruszania graczy
-  client.on("movePlayer", function(data) {
-    for (var i = 0; i < Players.length; i++) {
-      if ((Players[i].id) == (client.id)) {
-        var pl = Players[i];
+    client.on("movePlayer", function(data) {
+      for (var i = 0; i < Players.length; i++) {
+        if ((Players[i].id) == (client.id)) {
+          var pl = Players[i];
 
-        if (data.rotateOBJ) {
-          pl.rotateArmata -= data.rotateOBJ;
-          io.sockets.emit("movePlayer", {
-            rotateOBJ: pl.rotateArmata,
-            id: client.id
-          });
-        } else if (data.rotateL) {
-          pl.rotateLufa = data.rotateL;
-          io.sockets.emit("movePlayer", {
-            rotateL: pl.rotateLufa,
-            id: client.id
-          });
-        } else if (data.move == "w") {
-          pl.x += pl.speed * data.Direction_x;
-          pl.z += pl.speed * data.Direction_z;
-          io.sockets.emit("movePlayer", {
-            move: "w",
-            x: (pl.x),
-            z: (pl.z),
-            id: client.id
-          });
-        } else if (data.move == "s") {
-          pl.x -= pl.speed * data.Direction_x;
-          pl.z -= pl.speed * data.Direction_z;
-          io.sockets.emit("movePlayer", {
-            move: "s",
-            x: (pl.x),
-            z: (pl.z),
-            id: client.id
-          });
+          if (data.rotateOBJ) {
+            pl.rotateArmata -= data.rotateOBJ;
+            client.broadcast.emit("movePlayer", {
+              rotateOBJ: pl.rotateArmata,
+              id: client.id
+            });
+          } else if (data.rotateL) {
+            pl.rotateLufa = data.rotateL;
+            io.sockets.emit("movePlayer", {
+              rotateL: pl.rotateLufa,
+              id: client.id
+            });
+          } else if (data.move == "w") {
+            pl.x += pl.speed * data.Direction_x;
+            pl.z += pl.speed * data.Direction_z;
+            client.broadcast.emit("movePlayer", {
+              move: "w",
+              x: (pl.x),
+              z: (pl.z),
+              id: client.id
+            });
+          } else if (data.move == "s") {
+            pl.x -= pl.speed * data.Direction_x;
+            pl.z -= pl.speed * data.Direction_z;
+            client.broadcast.emit("movePlayer", {
+              move: "s",
+              x: (pl.x),
+              z: (pl.z),
+              id: client.id
+            });
+          }
         }
       }
-    }
-  })
+    })
 
   //w przypadku rozłączenia usunięcie gracza z listy graczy
   client.on("disconnect", function() {

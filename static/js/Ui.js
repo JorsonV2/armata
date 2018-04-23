@@ -1,6 +1,5 @@
 function Ui() {
 var element = document.body;
-
   //------- Start gry --------------
   $("#btn_Go").on("click", function() {
     net.connect();
@@ -38,9 +37,8 @@ var element = document.body;
       var move = {
         rotateOBJ: rot
       }
-      console.log(1);
       net.send(move);
-
+      game.returnMyPlayer().obj.rotation.y -= movementX * 0.002; // zmiana rotacji playera
       cameraRotation -= movementX * 0.002; // zmiana rotacji kamery
   }
 

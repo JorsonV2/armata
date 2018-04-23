@@ -1,12 +1,14 @@
 cameraRotation = Math.PI;
+
 function Game() {
+  var MyPlayer;
   var Players = [];
   var Nicks = [];
   var MyPlayer;
   var scene = new THREE.Scene();
   var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
 
-  var init = function () {
+  var init = function() {
 
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -70,13 +72,15 @@ function Game() {
       //------- Akcje dla klikniętych klawiszy --------------
 
       if (ui.map[87]) { // przód: w
-        //console.log(1);
         var move = {
           move: "w",
           Direction_x: (MyPlayer.obj.getWorldDirection().x),
           Direction_z: (MyPlayer.obj.getWorldDirection().z)
         }
         net.send(move);
+        MyPlayer.x += 10 * MyPlayer.obj.getWorldDirection().x
+        MyPlayer.z += 10 * MyPlayer.obj.getWorldDirection().z
+        MyPlayer.positionF();
       }
       if (ui.map[83]) { // tył: s
         var move = {
@@ -85,6 +89,9 @@ function Game() {
           Direction_z: (MyPlayer.obj.getWorldDirection().z)
         }
         net.send(move);
+        MyPlayer.x -= 10 * MyPlayer.obj.getWorldDirection().x
+        MyPlayer.z -= 10 * MyPlayer.obj.getWorldDirection().z
+        MyPlayer.positionF();
       }
       if (ui.map[65]) { // obrót kamery w lewo: a
 
@@ -109,13 +116,16 @@ function Game() {
   }
   init();
 
-  this.removePlayer = function (id) {
+  this.returnMyPlayer = function() {
+    return MyPlayer;
+  }
+  this.removePlayer = function(id) {
     for (var i = 0; i < Players.length; i++) {
       if ((Players[i].id) == (id)) {
         scene.remove(Players[i].obj)
         Players.splice(i, 1);
         for (var j = 0; j < Nicks.length; j++) {
-          if (Players[i].id == Nicks[j].id){
+          if (Players[i].id == Nicks[j].id) {
             Nicks[j].sprite.position.x = Players[i].obj.position.x;
             Nicks[j].sprite.position.z = Players[i].obj.position.z;
           }
@@ -125,7 +135,7 @@ function Game() {
     MyPlayerUpdate();
   }
 
-  this.createPlayer = function (data) {
+  this.createPlayer = function(data) {
     if (Players.length == 0) {
       for (var i = 0; i < data.length; i++) {
         Players[i] = new Armata(data[i]);
@@ -153,7 +163,7 @@ function Game() {
     MyPlayerUpdate();
   }
 
-  this.movePlayer = function (data) {
+  this.movePlayer = function(data) {
     for (var i = 0; i < Players.length; i++) {
       if ((Players[i].id) == (data.id)) {
         pl = Players[i];
