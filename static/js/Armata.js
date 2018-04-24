@@ -9,6 +9,8 @@ function Armata(data, player) {
   this.sprite = new makeTextSprite(this.name);
   this.kula = [];
   this.kula.push(new Kula(player));
+  this.power = 150;
+  this.reload = 30;
 
   this.rotateF = function () {
     this.obj.rotation.y = this.rotate;
