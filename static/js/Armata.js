@@ -7,7 +7,8 @@ function Armata(data) {
   this.rotate = data.rotateArmata;
   this.rotateL = data.rotateLufa;
   this.sprite = new makeTextSprite(this.name);
-  this.kula = new Kula();
+  this.kula = [];
+  this.kula.push(new Kula());
 
   this.rotateF = function () {
     this.obj.rotation.y = this.rotate;
@@ -26,7 +27,10 @@ function Armata(data) {
   }
 
   this.kulaPosition = function(){
-    this.kula.kulaPosition(this.lufa.rotation.z, this.obj.rotation.y, this.x, this.z);
+    for(var i = 0; i < this.kula.length; i++){
+      if(this.kula[i].isShot == false)
+        this.kula[i].kulaPosition(this.lufa.rotation.z, this.obj.rotation.y, this.x, this.z);
+    }
   }
 
 

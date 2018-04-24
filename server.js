@@ -93,6 +93,14 @@ var server = http.createServer(function(req, res) {
       res.write(data);
       res.end();
     })
+  } else if (req.url == "/js/FlightLine.js") {
+    fs.readFile("static/js/FlightLine.js", function(error, data) {
+      res.writeHead(200, {
+        'Content-Type': 'application/javascript'
+      });
+      res.write(data);
+      res.end();
+    })
   } else if (req.url == "/js/Target.js") {
     fs.readFile("static/js/Target.js", function(error, data) {
       res.writeHead(200, {

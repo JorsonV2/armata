@@ -1,4 +1,4 @@
-cameraRotation = -Math.PI;
+cameraRotation = -Math.PI * 0.75;
 
 function Game() {
   var MyPlayer;
@@ -61,7 +61,10 @@ function Game() {
         camera.position.z = 450 * Math.cos(cameraRotation) + MyPlayer.obj.position.z;
         camera.position.x = 450 * Math.sin(cameraRotation) + MyPlayer.obj.position.x;
         camera.position.y = 300;
+<<<<<<< HEAD
 
+=======
+>>>>>>> a6d1142ebaf6fb11de7972e19eca291441108e08
 
         angle = MyPlayer.lufa.rotation.z;
         rotation = MyPlayer.obj.rotation.y;
@@ -85,13 +88,24 @@ function Game() {
         }
 
         curve = new THREE.CatmullRomCurve3(curvePath);
-        points = curve.getPoints(curvePath.length - 2);
+        points = curve.getPoints(curvePath.length - 1);
         geometry = new THREE.BufferGeometry().setFromPoints(points);
         line.geometry = geometry;
 
-        target.target.position.z = curvePath[curvePath.length - 1].z;
+        target.target.position.z = curvePath[curvePath.length - 1].z//Math.cos(rotation) * (Math.pow(150, 2) * Math.sin(2 * angle) / 10) + MyPlayer.kula.sphere.position.z;
         target.target.position.x = curvePath[curvePath.length - 1].x;
+<<<<<<< HEAD
         camera.lookAt(target.target.position);
+=======
+
+        camera.lookAt(target.target.position);
+      }
+
+      for(var i = 0 ; i < Players.length; i++){
+        if(Players[i].id == MyPlayer.id){
+          
+        }
+>>>>>>> a6d1142ebaf6fb11de7972e19eca291441108e08
       }
 
       renderer.shadowMap.enabled = true
@@ -171,7 +185,10 @@ function Game() {
         scene.remove(Players[i].obj)
         scene.remove(Players[i].kula.sphere);
         Players.splice(i, 1);
+<<<<<<< HEAD
 
+=======
+>>>>>>> a6d1142ebaf6fb11de7972e19eca291441108e08
       }
     }
     MyPlayerUpdate();
@@ -182,7 +199,9 @@ function Game() {
       for (var i = 0; i < data.length; i++) {
         Players[i] = new Armata(data[i]);
         scene.add((Players[i].obj));
-        scene.add(Players[i].kula.sphere)
+        scene.add(Players[i].kula[0].sphere)
+        Players[i].kula[0].target = new Target();
+        Players[i].kula[0].flightLine = new FlightLine();
         Players[i].positionF();
         Players[i].rotateF();
         Players[i].rotateLufaF();
@@ -195,7 +214,7 @@ function Game() {
           } else if ((x + 1) == Players.length) {
             Players[i] = new Armata(data[i]);
             scene.add((Players[i].obj));
-            scene.add(Players[i].kula.sphere)
+            scene.add(Players[i].kula[0].sphere)
             Players[i].positionF();
             Players[i].rotateF();
             Players[i].rotateLufaF();
