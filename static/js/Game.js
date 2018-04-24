@@ -61,10 +61,7 @@ function Game() {
         camera.position.z = 450 * Math.cos(cameraRotation) + MyPlayer.obj.position.z;
         camera.position.x = 450 * Math.sin(cameraRotation) + MyPlayer.obj.position.x;
         camera.position.y = 300;
-<<<<<<< HEAD
 
-=======
->>>>>>> a6d1142ebaf6fb11de7972e19eca291441108e08
 
         angle = MyPlayer.lufa.rotation.z;
         rotation = MyPlayer.obj.rotation.y;
@@ -94,18 +91,14 @@ function Game() {
 
         target.target.position.z = curvePath[curvePath.length - 1].z//Math.cos(rotation) * (Math.pow(150, 2) * Math.sin(2 * angle) / 10) + MyPlayer.kula.sphere.position.z;
         target.target.position.x = curvePath[curvePath.length - 1].x;
-<<<<<<< HEAD
-        camera.lookAt(target.target.position);
-=======
 
         camera.lookAt(target.target.position);
       }
 
       for(var i = 0 ; i < Players.length; i++){
         if(Players[i].id == MyPlayer.id){
-          
+
         }
->>>>>>> a6d1142ebaf6fb11de7972e19eca291441108e08
       }
 
       renderer.shadowMap.enabled = true
@@ -185,10 +178,7 @@ function Game() {
         scene.remove(Players[i].obj)
         scene.remove(Players[i].kula.sphere);
         Players.splice(i, 1);
-<<<<<<< HEAD
 
-=======
->>>>>>> a6d1142ebaf6fb11de7972e19eca291441108e08
       }
     }
     MyPlayerUpdate();
