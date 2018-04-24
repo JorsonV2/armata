@@ -38,12 +38,6 @@ function Game() {
     scene.castShadow = true
     ////////////
 
-    //------- Poruszanie kamerą oraz celownikiem --------------
-
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////
-
     function render() {
       var delta = clock.getDelta();
 
