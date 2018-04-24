@@ -38,9 +38,8 @@ function Game() {
     scene.castShadow = true
     ////////////
 
-<<<<<<< HEAD
-=======
     //------- Poruszanie kamerą oraz celownikiem --------------
+
     var material = new THREE.LineBasicMaterial({ color: 0x0d910b });
     var geometry = new THREE.Geometry();
     geometry.vertices.push(new THREE.Vector3(0, 0, 0));
@@ -53,11 +52,8 @@ function Game() {
     var target = new Target();
     scene.add(target.target);
 
-
-
     //////////////////////////////////////////////////////////////////////////////////////////
 
->>>>>>> ac3d7674ca455f51174b952541875d63456e93e6
     function render() {
       var delta = clock.getDelta();
 
@@ -65,7 +61,7 @@ function Game() {
         camera.position.z = 450 * Math.cos(cameraRotation) + MyPlayer.obj.position.z;
         camera.position.x = 450 * Math.sin(cameraRotation) + MyPlayer.obj.position.x;
         camera.position.y = 300;
-        camera.lookAt(target.target.position);
+
 
         angle = MyPlayer.lufa.rotation.z;
         rotation = MyPlayer.obj.rotation.y;
@@ -95,6 +91,7 @@ function Game() {
 
         target.target.position.z = curvePath[curvePath.length - 1].z;
         target.target.position.x = curvePath[curvePath.length - 1].x;
+        camera.lookAt(target.target.position);
       }
 
       renderer.shadowMap.enabled = true
@@ -172,13 +169,9 @@ function Game() {
     for (var i = 0; i < Players.length; i++) {
       if ((Players[i].id) == (id)) {
         scene.remove(Players[i].obj)
+        scene.remove(Players[i].kula.sphere);
         Players.splice(i, 1);
-        for (var j = 0; j < Nicks.length; j++) {
-          if (Players[i].id == Nicks[j].id) {
-            Nicks[j].sprite.position.x = Players[i].obj.position.x;
-            Nicks[j].sprite.position.z = Players[i].obj.position.z;
-          }
-        }
+
       }
     }
     MyPlayerUpdate();
@@ -243,6 +236,7 @@ function Game() {
       var id = net.id();
       if ((Players[i].id) == (id)) {
         MyPlayer = Players[i];
+        Players[i].obj.remove(Players[i].sprite)
       }
     }
   }
