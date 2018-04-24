@@ -1,15 +1,12 @@
-function Kula(){
+function Kula(player){
     this.isShot = false;
     this.target;
     this.flightLine;
-    this.kulaShotPosition_x;
-    this.kulaShotPosition_y;
-    this.kulaShotPosition_z;
-    this.armataShotPosition_x;
-    this.armataShotPosition_z;
+    this.kulaShotPosition;
+    this.armataShotPosition;
     this.armataShotAngle;
-
-    var shotTime = 0;
+    this.shotTime = 0;
+    this.added = false;
 
     var geometry = new THREE.SphereGeometry( 30, 32, 32 );
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
@@ -21,11 +18,18 @@ function Kula(){
       this.sphere.position.y = 200 * Math.cos(angle) + 60;
     }
 
-    this.kulaShotPosition = function(){
+    this.setKulaShotPosition = function(){
       // pozycja_kuli = siła * czas * cotangens_kąta_pochylenia_lufy + początkowa_pozycja_kuli
-      this.sphere.position.x = 150 * shotTime * ((kulaPosition.x - armataPosition.x) / (kulaPosition.y - armataPosition.y)) + kulaPosition.x;
-      this.sphere.position.z = 150 * shotTime * ((kulaPosition.z - armataPosition.z) / (kulaPosition.y - armataPosition.y)) + kulaPosition.z;
+      this.sphere.position.x = 150 * this.shotTime * ((this.kulaShotPosition.x - this.armataShotPosition.x) / (this.kulaShotPosition.y - this.armataShotPosition.y)) + this.kulaShotPosition.x;
+      this.sphere.position.z = 150 * this.shotTime * ((this.kulaShotPosition.z - this.armataShotPosition.z) / (this.kulaShotPosition.y - this.armataShotPosition.y)) + this.kulaShotPosition.z;
       // pozycja _kuli = siła * czas * cosinus_kąta_pochylenia_lufy
-      this.sphere.position.y = 150 * shotTime * Math.cos(alpha) - ((10 * shotTime * shotTime) / 2) + kulaPosition.y;
+      this.sphere.position.y = 150 * this.shotTime * Math.cos(this.armataShotAngle) - ((10 * this.shotTime * this.shotTime) / 2) + this.kulaShotPosition.y;
+
+      this.shotTime += 0.05;
+    }
+
+    if(player){
+      this.target = new Target();
+      this.flightLine = new FlightLine();
     }
 }

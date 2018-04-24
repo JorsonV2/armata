@@ -39,17 +39,7 @@ function Game() {
     ////////////
 
     //------- Poruszanie kamerą oraz celownikiem --------------
-    var material = new THREE.LineBasicMaterial({ color: 0x0d910b });
-    var geometry = new THREE.Geometry();
-    geometry.vertices.push(new THREE.Vector3(0, 0, 0));
-    var line = new THREE.Line(geometry, material);
-    // var material = new THREE.LineBasicMaterial({ color: 0x930000 });
-    // var line2 = new THREE.Line(geometry, material);
-    // scene.add(line2);
-    scene.add(line);
 
-    var target = new Target();
-    scene.add(target.target);
 
 
 
@@ -66,38 +56,83 @@ function Game() {
         angle = MyPlayer.lufa.rotation.z;
         rotation = MyPlayer.obj.rotation.y;
 
+        for(var i = 0; i < MyPlayer.kula.length; i++){
+          if(MyPlayer.kula[i].isShot == false){
+            curveTime = 0;
+            curvePath = [];
+            curveVector = new THREE.Vector3(
+                200 * Math.sin(angle) * Math.sin(rotation) + MyPlayer.obj.position.x,
+                200 * Math.cos(angle) + 60,
+                200 * Math.sin(angle) * Math.cos(rotation) + MyPlayer.obj.position.z
+            );
 
-        curveTime = 0;
-        curvePath = [];
-        curveVector = new THREE.Vector3(
-            200 * Math.sin(angle) * Math.sin(rotation) + MyPlayer.obj.position.x,
-            200 * Math.cos(angle) + 60,
-            200 * Math.sin(angle) * Math.cos(rotation) + MyPlayer.obj.position.z
-        );
+            while (curveVector.y > 0) {
+                curvePath.push(curveVector);
+                curveTime += 0.05;
+                curveVector = new THREE.Vector3(0, 0, 0);
+                curveVector.x = 150 * curveTime * ((curvePath[0].x - MyPlayer.obj.position.x) / (curvePath[0].y - MyPlayer.obj.position.y)) + curvePath[0].x;
+                curveVector.z = 150 * curveTime * ((curvePath[0].z - MyPlayer.obj.position.z) / (curvePath[0].y - MyPlayer.obj.position.y)) + curvePath[0].z;
+                curveVector.y = 150 * curveTime * Math.cos(angle) - ((10 * curveTime * curveTime) / 2) + curvePath[0].y;
+            }
 
-        while (curveVector.y > 0) {
-            curvePath.push(curveVector);
-            curveTime += 0.05;
-            curveVector = new THREE.Vector3(0, 0, 0);
-            curveVector.x = 150 * curveTime * ((curvePath[0].x - MyPlayer.obj.position.x) / (curvePath[0].y - MyPlayer.obj.position.y)) + curvePath[0].x;
-            curveVector.z = 150 * curveTime * ((curvePath[0].z - MyPlayer.obj.position.z) / (curvePath[0].y - MyPlayer.obj.position.y)) + curvePath[0].z;
-            curveVector.y = 150 * curveTime * Math.cos(angle) - ((10 * curveTime * curveTime) / 2) + curvePath[0].y;
+            curve = new THREE.CatmullRomCurve3(curvePath);
+            points = curve.getPoints(curvePath.length - 1);
+            geometry = new THREE.BufferGeometry().setFromPoints(points);
+            MyPlayer.kula[i].flightLine.flightLine.geometry = geometry;
+
+            MyPlayer.kula[i].target.target.position.z = curvePath[curvePath.length - 1].z//Math.cos(rotation) * (Math.pow(150, 2) * Math.sin(2 * angle) / 10) + MyPlayer.kula.sphere.position.z;
+            MyPlayer.kula[i].target.target.position.x = curvePath[curvePath.length - 1].x;
+
+            camera.lookAt(MyPlayer.kula[i].target.target.position);
+          }
         }
-
-        curve = new THREE.CatmullRomCurve3(curvePath);
-        points = curve.getPoints(curvePath.length - 1);
-        geometry = new THREE.BufferGeometry().setFromPoints(points);
-        line.geometry = geometry;
-
-        target.target.position.z = curvePath[curvePath.length - 1].z//Math.cos(rotation) * (Math.pow(150, 2) * Math.sin(2 * angle) / 10) + MyPlayer.kula.sphere.position.z;
-        target.target.position.x = curvePath[curvePath.length - 1].x;
-
-        camera.lookAt(target.target.position);
       }
 
       for(var i = 0 ; i < Players.length; i++){
         if(Players[i].id == MyPlayer.id){
-          
+          for(var j = 0; j < Players[i].kula.length; j++){
+            if(Players[i].kula[j].isShot == true){
+              Players[i].kula[j].setKulaShotPosition();
+              if(Players[i].kula[j].shotTime > 3 && Players[i].kula[j].added == false){
+                kula = new Kula(true);
+                Players[i].kula.push(kula);
+                Players[i].kula[j].added = true;
+              }
+
+              curveTime = 0;
+              curvePath = [];
+              curveVector = Players[i].kula[j].sphere.position.clone();
+
+              while (curveVector.y > 0) {
+                  curvePath.push(curveVector);
+                  curveTime += 0.05;
+                  curveVector = new THREE.Vector3(0, 0, 0);
+                  curveVector.x = 150 * curveTime * ((curvePath[0].x - MyPlayer.obj.position.x) / (curvePath[0].y - MyPlayer.obj.position.y)) + curvePath[0].x;
+                  curveVector.z = 150 * curveTime * ((curvePath[0].z - MyPlayer.obj.position.z) / (curvePath[0].y - MyPlayer.obj.position.y)) + curvePath[0].z;
+                  curveVector.y = 150 * curveTime * Math.cos(Players[i].kula[j].armataShotAngle) - ((10 * curveTime * curveTime) / 2) + curvePath[0].y;
+              }
+
+              curve = new THREE.CatmullRomCurve3(curvePath);
+              points = curve.getPoints(curvePath.length - 1);
+              geometry = new THREE.BufferGeometry().setFromPoints(points);
+              Players[i].kula[i].flightLine.flightLine.geometry = geometry;
+
+              Players[i].kula[j].target.target.position.z = curvePath[curvePath.length - 1].z//Math.cos(rotation) * (Math.pow(150, 2) * Math.sin(2 * angle) / 10) + MyPlayer.kula.sphere.position.z;
+              Players[i].kula[j].target.target.position.x = curvePath[curvePath.length - 1].x;
+            }
+          }
+        }
+        else{
+          for(var j = 0; j < Players[i].kula.length; j++){
+            if(Players[i].kula[j].isShot == true){
+              Players[i].kula[j].setKulaShotPosition();
+              if(Players[i].kula[j].shotTime > 3 && Players[i].kula[j].added == false){
+                kula = new Kula(true);
+                Players[i].kula.push(kula);
+                Players[i].kula[j].added = true;
+              }
+            }
+          }
         }
       }
 
@@ -185,11 +220,11 @@ function Game() {
   this.createPlayer = function(data) {
     if (Players.length == 0) {
       for (var i = 0; i < data.length; i++) {
-        Players[i] = new Armata(data[i]);
+        Players[i] = new Armata(data[i], true);
         scene.add((Players[i].obj));
         scene.add(Players[i].kula[0].sphere)
-        Players[i].kula[0].target = new Target();
-        Players[i].kula[0].flightLine = new FlightLine();
+        scene.add(Players[i].kula[0].target.target)
+        scene.add(Players[i].kula[0].flightLine.flightLine)
         Players[i].positionF();
         Players[i].rotateF();
         Players[i].rotateLufaF();
@@ -200,7 +235,7 @@ function Game() {
           if (data[i].id == Players[x].id) {
             break;
           } else if ((x + 1) == Players.length) {
-            Players[i] = new Armata(data[i]);
+            Players[i] = new Armata(data[i], false);
             scene.add((Players[i].obj));
             scene.add(Players[i].kula[0].sphere)
             Players[i].positionF();
