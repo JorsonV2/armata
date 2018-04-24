@@ -45,6 +45,14 @@ var server = http.createServer(function(req, res) {
       res.write(data);
       res.end();
     })
+  }else if (req.url == "/js/Kula.js") {
+    fs.readFile("static/js/Kula.js", function(error, data) {
+      res.writeHead(200, {
+        'Content-Type': 'application/javascript'
+      });
+      res.write(data);
+      res.end();
+    })
   } else if (req.url == "/js/Armata.js") {
     fs.readFile("static/js/Armata.js", function(error, data) {
       res.writeHead(200, {
@@ -85,6 +93,14 @@ var server = http.createServer(function(req, res) {
       res.write(data);
       res.end();
     })
+  } else if (req.url == "/js/Target.js") {
+    fs.readFile("static/js/Target.js", function(error, data) {
+      res.writeHead(200, {
+        'Content-Type': 'application/javascript'
+      });
+      res.write(data);
+      res.end();
+    })
   } else if (req.url == "/mats/lufa.json") {
     fs.readFile("static/mats/lufa.json", function(error, data) {
       res.writeHead(200, {
@@ -116,7 +132,7 @@ function Player(id, name) {
   this.z = Math.floor(Math.random() * 5000 - 2500);
   this.speed = 10;
   this.rotateArmata = 0;
-  this.rotateLufa = 7.5;
+  this.rotateLufa = Math.PI * 0.3;
 }
 
 var Players = [];
