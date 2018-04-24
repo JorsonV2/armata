@@ -39,8 +39,18 @@ function Game() {
     ////////////
 
     //------- Poruszanie kamerą oraz celownikiem --------------
+<<<<<<< HEAD
+=======
 
-
+    var material = new THREE.LineBasicMaterial({ color: 0x0d910b });
+    var geometry = new THREE.Geometry();
+    geometry.vertices.push(new THREE.Vector3(0, 0, 0));
+    var line = new THREE.Line(geometry, material);
+    // var material = new THREE.LineBasicMaterial({ color: 0x930000 });
+    // var line2 = new THREE.Line(geometry, material);
+    // scene.add(line2);
+    scene.add(line);
+>>>>>>> d5088e6793e3fad43d0b52415da9fd3929799602
 
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -52,6 +62,7 @@ function Game() {
         camera.position.z = 450 * Math.cos(cameraRotation) + MyPlayer.obj.position.z;
         camera.position.x = 450 * Math.sin(cameraRotation) + MyPlayer.obj.position.x;
         camera.position.y = 300;
+
 
         angle = MyPlayer.lufa.rotation.z;
         rotation = MyPlayer.obj.rotation.y;
@@ -90,6 +101,7 @@ function Game() {
 
       for(var i = 0 ; i < Players.length; i++){
         if(Players[i].id == MyPlayer.id){
+<<<<<<< HEAD
           for(var j = 0; j < Players[i].kula.length; j++){
             if(Players[i].kula[j].isShot == true){
               Players[i].kula[j].setKulaShotPosition();
@@ -133,6 +145,9 @@ function Game() {
               }
             }
           }
+=======
+
+>>>>>>> d5088e6793e3fad43d0b52415da9fd3929799602
         }
       }
 
@@ -211,7 +226,9 @@ function Game() {
     for (var i = 0; i < Players.length; i++) {
       if ((Players[i].id) == (id)) {
         scene.remove(Players[i].obj)
+        scene.remove(Players[i].kula.sphere);
         Players.splice(i, 1);
+
       }
     }
     MyPlayerUpdate();
@@ -278,6 +295,7 @@ function Game() {
       var id = net.id();
       if ((Players[i].id) == (id)) {
         MyPlayer = Players[i];
+        Players[i].obj.remove(Players[i].sprite)
       }
     }
   }

@@ -33,8 +33,6 @@ function Armata(data, player) {
     }
   }
 
-
-
   //  this.color = color;
 
   var container = new THREE.Object3D();
