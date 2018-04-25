@@ -233,7 +233,7 @@ function Game() {
           }
         }
         if (Players[i].kula.length == 0) {
-          Players[i].kula.push(new Kula(true));
+          Players[i].kula.push(new Kula());
           Players[i].kulaPosition();
           scene.add(Players[i].kula[0].sphere)
           //console.log(Players[i].kula)
@@ -267,7 +267,7 @@ function Game() {
   this.createPlayer = function(data) {
     if (Players.length == 0) {
       for (var i = 0; i < data.length; i++) {
-        Players[i] = new Armata(data[i], true);
+        Players[i] = new Armata(data[i]);
         scene.add((Players[i].obj));
         scene.add(Players[i].kula[0].sphere)
         Players[i].positionF();
@@ -280,7 +280,7 @@ function Game() {
           if (data[i].id == Players[x].id) {
             break;
           } else if ((x + 1) == Players.length) {
-            Players[i] = new Armata(data[i], false);
+            Players[i] = new Armata(data[i]);
             scene.add((Players[i].obj));
             scene.add(Players[i].kula[0].sphere)
             Players[i].positionF();

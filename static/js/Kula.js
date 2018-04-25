@@ -1,7 +1,5 @@
-function Kula(player){
+function Kula(){
     this.isShot = false;
-    this.target;
-    this.flightLine;
     this.kulaShotPosition;
     this.armataShotPosition;
     this.armataShotAngle;
@@ -33,10 +31,5 @@ function Kula(player){
       this.sphere.position.y = 150 * this.shotTime * Math.cos(this.armataShotAngle) - ((10 * this.shotTime * this.shotTime) / 2) + this.kulaShotPosition.y;
       //console.log(this.kulaShotPosition.x)
       this.shotTime += 0.15;
-    }
-
-    if(player){
-      this.target = new Target();
-      this.flightLine = new FlightLine();
     }
 }
