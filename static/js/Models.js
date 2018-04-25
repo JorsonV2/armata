@@ -1,32 +1,32 @@
 function Models() {
+  var that = this;
+  this.lufa;
+  this.kolo;
 
-  var container = new THREE.Object3D
-  var mixer
-
-
-  this.loadModel = function(url, callback) {
-    console.log("start");
-
+  function loadModel(url, that, callback) {
     var material = new THREE.MeshNormalMaterial({
       color: 0xff0000,
       specular: 0xffffff,
       shininess: 50,
       side: THREE.DoubleSide,
-      //  map: new THREE.TextureLoader().load("wool.png"),
     })
 
     var loader = new THREE.JSONLoader();
 
     loader.load(url, function(geometry) {
-
-      var mesh = new THREE.Mesh(geometry, material);
-      mesh.scale.set(7, 7, 7);
-      mesh.position.set(0, 60, 0);
-
-      // zwrócenie kontenera
-
+      mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(0, 0, 0);
       callback(mesh);
-
     });
   }
+  /////////////////////////////////////////////////////////
+
+  loadModel("mats/lufa.json", this, function(data) {
+    that.lufa = data;
+  })
+
+  loadModel("mats/kolo.json", this, function(data) {
+    that.kolo = data;
+  })
+
 }

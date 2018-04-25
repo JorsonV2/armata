@@ -88,15 +88,11 @@ io.sockets.on("connection", function(client) {
       if ((Players[i].id) == (client.id)) {
         var pl = Players[i];
 
-        if (data.rotateOBJ) {
-          pl.rotateArmata -= data.rotateOBJ;
+        if (data.rotateOBJ || data.rotateL) {
+          pl.rotateArmata = data.rotateOBJ;
+          pl.rotateLufa = data.rotateL;
           client.broadcast.emit("movePlayer", {
             rotateOBJ: pl.rotateArmata,
-            id: client.id
-          });
-        } else if (data.rotateL) {
-          pl.rotateLufa = data.rotateL;
-          io.sockets.emit("movePlayer", {
             rotateL: pl.rotateLufa,
             id: client.id
           });

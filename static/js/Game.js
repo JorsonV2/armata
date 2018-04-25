@@ -52,17 +52,6 @@ function Game() {
       renderer.shadowMap.enabled = true
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-      // if (net) {
-      //   for (var i = 0; i < Players.length; i++) {
-      //     if ((Players[i].id) == (net.id())) {
-      //       camera.position.x = Players[i].obj.position.x + 300
-      //       camera.position.z = Players[i].obj.position.z
-      //       camera.position.y = Players[i].obj.position.y + 500
-      //       camera.lookAt(Players[i].obj.position)
-      //       //camera.rotation.y = (Math.PI / 2);
-      //     }
-      //   }
-      // }
 
       //------- Akcje dla klikniętych klawiszy --------------
 
@@ -234,12 +223,7 @@ function Game() {
         }
       }
 
-
       requestAnimationFrame(render);
-
-
-
-
 
       renderer.shadowMap.enabled = true
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -302,9 +286,8 @@ function Game() {
         pl = Players[i];
         if (data.rotateOBJ) {
           pl.rotate = data.rotateOBJ;
-          pl.rotateF();
-        } else if (data.rotateL) {
           pl.rotateL = data.rotateL;
+          pl.rotateF();
           pl.rotateLufaF();
         } else if (data.move == "w") {
           pl.x = data.x;
