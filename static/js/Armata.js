@@ -39,18 +39,20 @@ function Armata(data, player) {
   var lufa = models.lufa.clone();
   lufa.scale.set(7, 7, 7);
   lufa.rotateY(Math.PI / 2)
-  lufa.position.y = 30;
+  //lufa.rotate(Math.PI / 2)
+  lufa.position.y = 40;
   this.lufa = lufa;
 
   var kolo1 = models.kolo.clone();
   kolo1.scale.set(15, 15, 15)
   kolo1.rotateY(Math.PI / 2)
-  kolo1.position.set(-50, 0, 0)
+  //kolo1.rotateZ(Math.PI ) //obrot koła
+  kolo1.position.set(53, 45, 0)
 
   var kolo2 = models.kolo.clone();
   kolo2.scale.set(15, 15, 15)
   kolo2.rotateY(Math.PI / 2)
-  kolo2.position.set(50, 0, 0)
+  kolo2.position.set(-53, 45, 0)
 
   this.sprite.position.y = 200;
   //this.sprite.position.x = -30

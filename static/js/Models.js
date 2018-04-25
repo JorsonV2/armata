@@ -4,6 +4,7 @@ function Models() {
   this.kolo;
 
   function loadModel(url, that, callback) {
+
     var material = new THREE.MeshNormalMaterial({
       color: 0xff0000,
       specular: 0xffffff,
@@ -15,7 +16,12 @@ function Models() {
 
     loader.load(url, function(geometry) {
       mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(0, 0, 0);
+      if(url == "mats/lufa.json"){
+        geometry.translate((1.3),(-3.3), 0)
+      } else if (url == "mats/kolo.json") {
+        geometry.translate((0),(-3),0)
+      }
+        mesh.position.set(0, 0, 0);
       callback(mesh);
     });
   }
