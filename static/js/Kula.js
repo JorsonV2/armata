@@ -14,7 +14,7 @@ function Kula(){
     this.kulaPosition = function(angle, rotation, armataPosition_x, armataPosition_z){
       this.sphere.position.z = 200 * Math.sin(angle) * Math.cos(rotation) + armataPosition_z;
       this.sphere.position.x = 200 * Math.sin(angle) * Math.sin(rotation) + armataPosition_x;
-      this.sphere.position.y = 200 * Math.cos(angle) + 60;
+      this.sphere.position.y = 200 * Math.cos(angle) + 50;
     }
 
     this.setKulaShotPosition = function(){
