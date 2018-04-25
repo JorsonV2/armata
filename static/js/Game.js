@@ -112,9 +112,9 @@ function Game() {
 
       if (MyPlayer) {
         // Ogracanie kamery podczas obracania playera
-        camera.position.z = 450 * Math.cos(cameraRotation) + MyPlayer.obj.position.z;
-        camera.position.x = 450 * Math.sin(cameraRotation) + MyPlayer.obj.position.x;
-        camera.position.y = 300;
+        camera.position.z = 600 * Math.cos(cameraRotation) + MyPlayer.obj.position.z;
+        camera.position.x = 600 * Math.sin(cameraRotation) + MyPlayer.obj.position.x;
+        camera.position.y = 400;
 
 
         angle = MyPlayer.lufa.rotation.z;
