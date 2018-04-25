@@ -10,7 +10,7 @@ function Armata(data, player) {
   this.kula = [];
   this.kula.push(new Kula(player));
   this.power = 150;
-  this.reload = 30;
+  this.reload = 5;
 
   this.rotateF = function () {
     this.obj.rotation.y = this.rotate;
@@ -54,16 +54,11 @@ function Armata(data, player) {
   geometry.translate(0, 80, 0);
   this.lufa = lufa;
 
-  // var loader = new THREE.JSONLoader();
-  // loader.load('mats/lufa.json', function(geometry) {
-  //   var mesh = new THREE.Mesh(geometry, material);
-  //   mesh.scale.set(10, 10, 10);
-  //   mesh.position.set(0, 60, 0);
-  //   console.log(that);
-  //   that.lufa = mesh;
-  //   container.add(mesh);
-  //
-  // });
+  models.loadModel("mats/lufa.json", function (data) {
+   console.log("model został załadowany")
+   //this.lufa = lufa;
+   container.add(data) // data to obiekt kontenera zwrócony z Model.js
+})
 
   var geometry = new THREE.CylinderGeometry(50, 50, 30, 32);
   var kolo1 = new THREE.Mesh(geometry, material)
@@ -79,6 +74,8 @@ function Armata(data, player) {
 
   this.sprite.position.y = 200;
   //this.sprite.position.x = -30
+
+
 
   container.add(kolo1)
   container.add(kolo2)

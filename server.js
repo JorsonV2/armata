@@ -26,24 +26,37 @@ function file(req, res) {
   var content;
   if (format == "js" || format == "json") {
     content = "application/javascript";
+    file2();
   } else if (format == "css") {
     content = "text/css";
+    file2();
   } else if (format == "html") {
     content = "text/html";
-  }
-  fs.readFile(("static" + url), function(error, data) {
-    res.writeHead(200, {
-      'Content-Type': content
+    file2();
+  } else {
+    console.log(url);
+    res.writeHead(404, {
+      'Content-Type': 'text/html'
     });
-    res.write(data);
+    res.write("<h1>404 - brak takiej strony</h1>");
     res.end();
-  })
+  }
+  function file2(){
+    fs.readFile(("static" + url), function(error, data) {
+      res.writeHead(200, {
+        'Content-Type': content
+      });
+      res.write(data);
+      res.end();
+    })
+  }
+
 }
 
 server.listen(3000, function() {
   console.log("serwer startuje na porcie 3000")
 });
-//server.listen(3000, '192.168.1.100');
+//server.listen(3000, '10.18.71.216');
 
 function Player(id, name) {
   this.id = id;

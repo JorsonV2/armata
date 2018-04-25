@@ -4,7 +4,7 @@ var ui;
 var models;
 
 $(document).ready(function () {
-  models = new Models();
+      models = new Models();
       net = new Net();
       ui = new Ui();
 })
