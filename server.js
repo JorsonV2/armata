@@ -33,6 +33,9 @@ function file(req, res) {
   } else if (format == "html") {
     content = "text/html";
     file2();
+  } else if (format == "png" || format == "jpg") {
+    content = "image/jpeg";
+    file2();
   } else {
     console.log(url);
     res.writeHead(404, {
@@ -41,7 +44,8 @@ function file(req, res) {
     res.write("<h1>404 - brak takiej strony</h1>");
     res.end();
   }
-  function file2(){
+
+  function file2() {
     fs.readFile(("static" + url), function(error, data) {
       res.writeHead(200, {
         'Content-Type': content

@@ -46,6 +46,9 @@ function Game() {
 
     //////////////////////////////////////////////////////////////////////////////////////////
 
+    var light = new THREE.AmbientLight(0x404040); // soft white light
+    scene.add(light);
+
     function render() {
       var delta = clock.getDelta();
 
@@ -86,8 +89,8 @@ function Game() {
         cameraRotation = Math.max(MyPlayer.obj.rotation.y - Math.PI * 1.25, Math.min(MyPlayer.obj.rotation.y - Math.PI * 0.75, cameraRotation));
       }
       if (ui.map[32]) {
-        for(var i = 0; i < MyPlayer.kula.length; i++){
-          if(MyPlayer.kula[i].shotTime == 0){
+        for (var i = 0; i < MyPlayer.kula.length; i++) {
+          if (MyPlayer.kula[i].shotTime == 0) {
             MyPlayer.kula[i].isShot = true;
             scene.add(MyPlayer.kula[i].target.target);
             scene.add(MyPlayer.kula[i].flightLine.flightLine);
@@ -114,18 +117,18 @@ function Game() {
         curveTime = 0;
         curvePath = [];
         curveVector = new THREE.Vector3(
-            200 * Math.sin(angle) * Math.sin(rotation) + MyPlayer.obj.position.x,
-            200 * Math.cos(angle) + 60,
-            200 * Math.sin(angle) * Math.cos(rotation) + MyPlayer.obj.position.z
+          200 * Math.sin(angle) * Math.sin(rotation) + MyPlayer.obj.position.x,
+          200 * Math.cos(angle) + 60,
+          200 * Math.sin(angle) * Math.cos(rotation) + MyPlayer.obj.position.z
         );
 
         while (curveVector.y > 0) {
-            curvePath.push(curveVector);
-            curveTime += 0.05;
-            curveVector = new THREE.Vector3(0, 0, 0);
-            curveVector.x = MyPlayer.power * curveTime * ((curvePath[0].x - MyPlayer.obj.position.x) / (curvePath[0].y - MyPlayer.obj.position.y)) + curvePath[0].x;
-            curveVector.z = MyPlayer.power * curveTime * ((curvePath[0].z - MyPlayer.obj.position.z) / (curvePath[0].y - MyPlayer.obj.position.y)) + curvePath[0].z;
-            curveVector.y = MyPlayer.power * curveTime * Math.cos(angle) - ((10 * curveTime * curveTime) / 2) + curvePath[0].y;
+          curvePath.push(curveVector);
+          curveTime += 0.05;
+          curveVector = new THREE.Vector3(0, 0, 0);
+          curveVector.x = MyPlayer.power * curveTime * ((curvePath[0].x - MyPlayer.obj.position.x) / (curvePath[0].y - MyPlayer.obj.position.y)) + curvePath[0].x;
+          curveVector.z = MyPlayer.power * curveTime * ((curvePath[0].z - MyPlayer.obj.position.z) / (curvePath[0].y - MyPlayer.obj.position.y)) + curvePath[0].z;
+          curveVector.y = MyPlayer.power * curveTime * Math.cos(angle) - ((10 * curveTime * curveTime) / 2) + curvePath[0].y;
         }
 
         curve = new THREE.CatmullRomCurve3(curvePath);
@@ -133,7 +136,7 @@ function Game() {
         geometry = new THREE.BufferGeometry().setFromPoints(points);
         flightLine.flightLine.geometry = geometry;
 
-        target.target.position.z = curvePath[curvePath.length - 1].z//Math.cos(rotation) * (Math.pow(150, 2) * Math.sin(2 * angle) / 10) + MyPlayer.kula.sphere.position.z;
+        target.target.position.z = curvePath[curvePath.length - 1].z //Math.cos(rotation) * (Math.pow(150, 2) * Math.sin(2 * angle) / 10) + MyPlayer.kula.sphere.position.z;
         target.target.position.x = curvePath[curvePath.length - 1].x;
 
         camera.lookAt(target.target.position);
@@ -141,15 +144,15 @@ function Game() {
 
       }
 
-      for(var i = 0 ; i < Players.length; i++){ // Wykonywane dla wszystkich playerów
-        if(Players[i].id == MyPlayer.id){ // wykonywane dla gracza
-          for(var j = 0; j < MyPlayer.kula.length; j++){// wykonywane gla wszystkich kul
-            if(MyPlayer.kula[j].isShot){// jeżeli została wystrzelona
+      for (var i = 0; i < Players.length; i++) { // Wykonywane dla wszystkich playerów
+        if (Players[i].id == MyPlayer.id) { // wykonywane dla gracza
+          for (var j = 0; j < MyPlayer.kula.length; j++) { // wykonywane gla wszystkich kul
+            if (MyPlayer.kula[j].isShot) { // jeżeli została wystrzelona
 
-              MyPlayer.kula[j].setKulaShotPosition();//ustalenie jej pozycji
+              MyPlayer.kula[j].setKulaShotPosition(); //ustalenie jej pozycji
 
-              if(MyPlayer.kula[j].sphere.position.y > 0){
-                if(MyPlayer.kula[j].shotTime > MyPlayer.reload && Players[i].kula[j].added == false){ // jeżeli leci dłużej niż x ładuje się 2
+              if (MyPlayer.kula[j].sphere.position.y > 0) {
+                if (MyPlayer.kula[j].shotTime > MyPlayer.reload && Players[i].kula[j].added == false) { // jeżeli leci dłużej niż x ładuje się 2
                   kula = new Kula(true);
                   MyPlayer.kula.push(kula);
                   MyPlayer.kulaPosition();
@@ -164,15 +167,15 @@ function Game() {
                 curveVector = MyPlayer.kula[j].sphere.position.clone();
 
                 while (curveVector.y > 0) {
-                    curvePath.push(curveVector);
-                    curveTime += 0.1;
-                    curveVector = new THREE.Vector3(0, 0, 0);
-                    curveVector.x = MyPlayer.power * curveTime * ((MyPlayer.kula[j].kulaShotPosition.x - MyPlayer.kula[j].armataShotPosition.x) / (MyPlayer.kula[j].kulaShotPosition.y - MyPlayer.kula[j].armataShotPosition.y)) + MyPlayer.kula[j].kulaShotPosition.x;
-                    curveVector.z = MyPlayer.power * curveTime * ((MyPlayer.kula[j].kulaShotPosition.z - MyPlayer.kula[j].armataShotPosition.z) / (MyPlayer.kula[j].kulaShotPosition.y - MyPlayer.kula[j].armataShotPosition.y)) + MyPlayer.kula[j].kulaShotPosition.z;
-                    curveVector.y = MyPlayer.power * curveTime * Math.cos(MyPlayer.kula[j].armataShotAngle) - ((10 * curveTime * curveTime) / 2) + MyPlayer.kula[j].kulaShotPosition.y;
-                    //console.log(curveVector)
+                  curvePath.push(curveVector);
+                  curveTime += 0.1;
+                  curveVector = new THREE.Vector3(0, 0, 0);
+                  curveVector.x = MyPlayer.power * curveTime * ((MyPlayer.kula[j].kulaShotPosition.x - MyPlayer.kula[j].armataShotPosition.x) / (MyPlayer.kula[j].kulaShotPosition.y - MyPlayer.kula[j].armataShotPosition.y)) + MyPlayer.kula[j].kulaShotPosition.x;
+                  curveVector.z = MyPlayer.power * curveTime * ((MyPlayer.kula[j].kulaShotPosition.z - MyPlayer.kula[j].armataShotPosition.z) / (MyPlayer.kula[j].kulaShotPosition.y - MyPlayer.kula[j].armataShotPosition.y)) + MyPlayer.kula[j].kulaShotPosition.z;
+                  curveVector.y = MyPlayer.power * curveTime * Math.cos(MyPlayer.kula[j].armataShotAngle) - ((10 * curveTime * curveTime) / 2) + MyPlayer.kula[j].kulaShotPosition.y;
+                  //console.log(curveVector)
                 }
-                if(curvePath.length > 1){
+                if (curvePath.length > 1) {
                   curve = new THREE.CatmullRomCurve3(curvePath);
                   points = curve.getPoints(curvePath.length - 1);
                   geometry = new THREE.BufferGeometry().setFromPoints(points);
@@ -180,7 +183,7 @@ function Game() {
                   //console.log(curvePath)
                 }
 
-                MyPlayer.kula[j].target.target.position.z = curvePath[curvePath.length - 1].z//Math.cos(rotation) * (Math.pow(150, 2) * Math.sin(2 * angle) / 10) + MyPlayer.kula.sphere.position.z;
+                MyPlayer.kula[j].target.target.position.z = curvePath[curvePath.length - 1].z //Math.cos(rotation) * (Math.pow(150, 2) * Math.sin(2 * angle) / 10) + MyPlayer.kula.sphere.position.z;
                 MyPlayer.kula[j].target.target.position.x = curvePath[curvePath.length - 1].x;
 
                 //console.log(Players[i].kula[j].sphere.position.y, curvePath[curvePath.length - 1].y)
@@ -193,7 +196,7 @@ function Game() {
 
               // ------------------ Usuwanie kuli która spadła ---------------------------
 
-              if(Players[i].kula[j].sphere.position.y < 0){
+              if (Players[i].kula[j].sphere.position.y < 0) {
                 scene.remove(MyPlayer.kula[j].target.target);
                 scene.remove(MyPlayer.kula[j].flightLine.flightLine);
                 scene.remove(MyPlayer.kula[j].sphere);
@@ -202,12 +205,11 @@ function Game() {
               }
             }
           }
-        }
-        else{// wykonuje się dla wszyskich playerów oprucz gracza
-          for(var j = 0; j < Players[i].kula.length; j++){
-            if(Players[i].kula[j].isShot == true){
+        } else { // wykonuje się dla wszyskich playerów oprucz gracza
+          for (var j = 0; j < Players[i].kula.length; j++) {
+            if (Players[i].kula[j].isShot == true) {
               Players[i].kula[j].setKulaShotPosition();
-              if(Players[i].kula[j].shotTime > 3 && Players[i].kula[j].added == false){
+              if (Players[i].kula[j].shotTime > 3 && Players[i].kula[j].added == false) {
                 kula = new Kula(true);
                 Players[i].kula.push(kula);
                 Players[i].kula[j].added = true;
@@ -215,7 +217,7 @@ function Game() {
             }
           }
         }
-        if(Players[i].kula.length == 0){
+        if (Players[i].kula.length == 0) {
           Players[i].kula.push(new Kula(true));
           Players[i].kulaPosition();
           scene.add(Players[i].kula[0].sphere)
@@ -241,7 +243,7 @@ function Game() {
     for (var i = 0; i < Players.length; i++) {
       if ((Players[i].id) == (id)) {
         scene.remove(Players[i].obj)
-        for(var j = 0; j < Players[i].kula.length; j++){
+        for (var j = 0; j < Players[i].kula.length; j++) {
           scene.remove(Players[i].kula[j].sphere);
         }
         Players.splice(i, 1);
