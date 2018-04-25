@@ -1,15 +1,14 @@
-function Kula(player){
+function Kula(){
     this.isShot = false;
-    this.target;
-    this.flightLine;
     this.kulaShotPosition;
     this.armataShotPosition;
     this.armataShotAngle;
+    this.power;
     this.shotTime = 0;
     this.added = false;
 
     var geometry = new THREE.SphereGeometry( 30, 32, 32 );
-    var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    var material = new THREE.MeshBasicMaterial( {color: 0x0800f2} );
     this.sphere = new THREE.Mesh( geometry, material );
 
     this.kulaPosition = function(angle, rotation, armataPosition_x, armataPosition_z){
@@ -20,16 +19,11 @@ function Kula(player){
 
     this.setKulaShotPosition = function(){
       // pozycja_kuli = siła * czas * cotangens_kąta_pochylenia_lufy + początkowa_pozycja_kuli
-      this.sphere.position.x = 150 * this.shotTime * ((this.kulaShotPosition.x - this.armataShotPosition.x) / (this.kulaShotPosition.y - this.armataShotPosition.y)) + this.kulaShotPosition.x;
-      this.sphere.position.z = 150 * this.shotTime * ((this.kulaShotPosition.z - this.armataShotPosition.z) / (this.kulaShotPosition.y - this.armataShotPosition.y)) + this.kulaShotPosition.z;
+      this.sphere.position.x = this.power * this.shotTime * ((this.kulaShotPosition.x - this.armataShotPosition.x) / (this.kulaShotPosition.y - this.armataShotPosition.y)) + this.kulaShotPosition.x;
+      this.sphere.position.z = this.power * this.shotTime * ((this.kulaShotPosition.z - this.armataShotPosition.z) / (this.kulaShotPosition.y - this.armataShotPosition.y)) + this.kulaShotPosition.z;
       // pozycja _kuli = siła * czas * cosinus_kąta_pochylenia_lufy
-      this.sphere.position.y = 150 * this.shotTime * Math.cos(this.armataShotAngle) - ((10 * this.shotTime * this.shotTime) / 2) + this.kulaShotPosition.y;
+      this.sphere.position.y = this.power * this.shotTime * Math.cos(this.armataShotAngle) - ((10 * this.shotTime * this.shotTime) / 2) + this.kulaShotPosition.y;
       //console.log(this.kulaShotPosition.x)
       this.shotTime += 0.15;
-    }
-
-    if(player){
-      this.target = new Target();
-      this.flightLine = new FlightLine();
     }
 }

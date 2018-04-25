@@ -1,4 +1,4 @@
-function Armata(data, player) {
+function Armata(data) {
   this.id = data.id;
   this.name = data.name;
   this.lufa;
@@ -8,9 +8,9 @@ function Armata(data, player) {
   this.rotateL = data.rotateLufa;
   this.sprite = new makeTextSprite(this.name);
   this.kula = [];
-  this.kula.push(new Kula(player));
-  this.power = 150;
-  this.reload = 30;
+  this.kula.push(new Kula());
+  this.power = 250;
+  this.reload = 0.2;
 
   this.rotateF = function () {
     this.obj.rotation.y = this.rotate;

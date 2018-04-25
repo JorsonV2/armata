@@ -99,9 +99,8 @@ function Game() {
       if (ui.map[32]) {
         for(var i = 0; i < MyPlayer.kula.length; i++){
           if(MyPlayer.kula[i].shotTime == 0){
+            MyPlayer.kula[i].power = MyPlayer.power;
             MyPlayer.kula[i].isShot = true;
-            scene.add(MyPlayer.kula[i].target.target);
-            scene.add(MyPlayer.kula[i].flightLine.flightLine);
             MyPlayer.kula[i].kulaShotPosition = MyPlayer.kula[i].sphere.position.clone();
             MyPlayer.kula[i].armataShotPosition = MyPlayer.obj.position.clone();
             MyPlayer.kula[i].armataShotAngle = MyPlayer.lufa.rotation.z;
@@ -170,30 +169,6 @@ function Game() {
 
                 //------------- Tor lotu lecącej kuli -------------------------------
 
-                curveTime = MyPlayer.kula[j].shotTime;
-                curvePath = [];
-                curveVector = MyPlayer.kula[j].sphere.position.clone();
-
-                while (curveVector.y > 0) {
-                    curvePath.push(curveVector);
-                    curveTime += 0.1;
-                    curveVector = new THREE.Vector3(0, 0, 0);
-                    curveVector.x = MyPlayer.power * curveTime * ((MyPlayer.kula[j].kulaShotPosition.x - MyPlayer.kula[j].armataShotPosition.x) / (MyPlayer.kula[j].kulaShotPosition.y - MyPlayer.kula[j].armataShotPosition.y)) + MyPlayer.kula[j].kulaShotPosition.x;
-                    curveVector.z = MyPlayer.power * curveTime * ((MyPlayer.kula[j].kulaShotPosition.z - MyPlayer.kula[j].armataShotPosition.z) / (MyPlayer.kula[j].kulaShotPosition.y - MyPlayer.kula[j].armataShotPosition.y)) + MyPlayer.kula[j].kulaShotPosition.z;
-                    curveVector.y = MyPlayer.power * curveTime * Math.cos(MyPlayer.kula[j].armataShotAngle) - ((10 * curveTime * curveTime) / 2) + MyPlayer.kula[j].kulaShotPosition.y;
-                    //console.log(curveVector)
-                }
-                if(curvePath.length > 1){
-                  curve = new THREE.CatmullRomCurve3(curvePath);
-                  points = curve.getPoints(curvePath.length - 1);
-                  geometry = new THREE.BufferGeometry().setFromPoints(points);
-                  MyPlayer.kula[j].flightLine.flightLine.geometry = geometry;
-                  //console.log(curvePath)
-                }
-
-                MyPlayer.kula[j].target.target.position.z = curvePath[curvePath.length - 1].z//Math.cos(rotation) * (Math.pow(150, 2) * Math.sin(2 * angle) / 10) + MyPlayer.kula.sphere.position.z;
-                MyPlayer.kula[j].target.target.position.x = curvePath[curvePath.length - 1].x;
-
                 //console.log(Players[i].kula[j].sphere.position.y, curvePath[curvePath.length - 1].y)
 
                 //console.log(Players[i].kula[j].kulaShotPosition)
@@ -205,8 +180,6 @@ function Game() {
               // ------------------ Usuwanie kuli która spadła ---------------------------
 
               if(Players[i].kula[j].sphere.position.y < 0){
-                scene.remove(MyPlayer.kula[j].target.target);
-                scene.remove(MyPlayer.kula[j].flightLine.flightLine);
                 scene.remove(MyPlayer.kula[j].sphere);
                 MyPlayer.kula.splice(j, 1);
                 //console.log(Players[i].kula)
@@ -269,7 +242,7 @@ function Game() {
   this.createPlayer = function(data) {
     if (Players.length == 0) {
       for (var i = 0; i < data.length; i++) {
-        Players[i] = new Armata(data[i], true);
+        Players[i] = new Armata(data[i]);
         scene.add((Players[i].obj));
         scene.add(Players[i].kula[0].sphere)
         Players[i].positionF();
@@ -282,7 +255,7 @@ function Game() {
           if (data[i].id == Players[x].id) {
             break;
           } else if ((x + 1) == Players.length) {
-            Players[i] = new Armata(data[i], false);
+            Players[i] = new Armata(data[i]);
             scene.add((Players[i].obj));
             scene.add(Players[i].kula[0].sphere)
             Players[i].positionF();
