@@ -3,6 +3,7 @@ function Kula(){
     this.kulaShotPosition;
     this.armataShotPosition;
     this.armataShotAngle;
+    this.power;
     this.shotTime = 0;
     this.added = false;
 
@@ -25,10 +26,10 @@ function Kula(){
 
     this.setKulaShotPosition = function(){
       // pozycja_kuli = siła * czas * cotangens_kąta_pochylenia_lufy + początkowa_pozycja_kuli
-      this.sphere.position.x = 150 * this.shotTime * ((this.kulaShotPosition.x - this.armataShotPosition.x) / (this.kulaShotPosition.y - this.armataShotPosition.y)) + this.kulaShotPosition.x;
-      this.sphere.position.z = 150 * this.shotTime * ((this.kulaShotPosition.z - this.armataShotPosition.z) / (this.kulaShotPosition.y - this.armataShotPosition.y)) + this.kulaShotPosition.z;
+      this.sphere.position.x = this.power * this.shotTime * ((this.kulaShotPosition.x - this.armataShotPosition.x) / (this.kulaShotPosition.y - this.armataShotPosition.y)) + this.kulaShotPosition.x;
+      this.sphere.position.z = this.power * this.shotTime * ((this.kulaShotPosition.z - this.armataShotPosition.z) / (this.kulaShotPosition.y - this.armataShotPosition.y)) + this.kulaShotPosition.z;
       // pozycja _kuli = siła * czas * cosinus_kąta_pochylenia_lufy
-      this.sphere.position.y = 150 * this.shotTime * Math.cos(this.armataShotAngle) - ((10 * this.shotTime * this.shotTime) / 2) + this.kulaShotPosition.y;
+      this.sphere.position.y = this.power * this.shotTime * Math.cos(this.armataShotAngle) - ((10 * this.shotTime * this.shotTime) / 2) + this.kulaShotPosition.y;
       //console.log(this.kulaShotPosition.x)
       this.shotTime += 0.15;
     }
