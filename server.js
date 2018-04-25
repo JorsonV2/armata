@@ -33,6 +33,9 @@ function file(req, res) {
   } else if (format == "html") {
     content = "text/html";
     file2();
+  } else if (format == "png" || format == "jpg") {
+    content = "image/jpeg";
+    file2();
   } else {
     console.log(url);
     res.writeHead(404, {
@@ -41,7 +44,8 @@ function file(req, res) {
     res.write("<h1>404 - brak takiej strony</h1>");
     res.end();
   }
-  function file2(){
+
+  function file2() {
     fs.readFile(("static" + url), function(error, data) {
       res.writeHead(200, {
         'Content-Type': content
@@ -88,15 +92,11 @@ io.sockets.on("connection", function(client) {
       if ((Players[i].id) == (client.id)) {
         var pl = Players[i];
 
-        if (data.rotateOBJ) {
-          pl.rotateArmata -= data.rotateOBJ;
+        if (data.rotateOBJ || data.rotateL) {
+          pl.rotateArmata = data.rotateOBJ;
+          pl.rotateLufa = data.rotateL;
           client.broadcast.emit("movePlayer", {
             rotateOBJ: pl.rotateArmata,
-            id: client.id
-          });
-        } else if (data.rotateL) {
-          pl.rotateLufa = data.rotateL;
-          io.sockets.emit("movePlayer", {
             rotateL: pl.rotateLufa,
             id: client.id
           });

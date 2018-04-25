@@ -26,25 +26,21 @@ var element = document.body;
       var movementX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
       var movementY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
 
-      //wysyłanie rotacji na serwer
-
-    //  armata.getCont().rotation.y -= movementX * 0.002; // zmiana rotacji playera
-
-    //  armata.getMesh().rotation.x -= movementY * 0.002;
-    //  armata.getMesh().rotation.x = Math.max(Math.PI * 0, Math.min(Math.PI * 0.5, armata.getMesh().rotation.x)); // zmiana kątu lufy
-
-      var rot = movementX * 0.002;
-      var move = {
-        rotateOBJ: rot
-      }
-      net.send(move);
-
       game.returnMyPlayer().obj.rotation.y -= movementX * 0.002; // zmiana rotacji playera
 
       game.returnMyPlayer().lufa.rotation.z -= movementY * 0.002;
       game.returnMyPlayer().lufa.rotation.z = Math.max(Math.PI * 0, Math.min(Math.PI * 0.5, game.returnMyPlayer().lufa.rotation.z));
 
+      var rot = game.returnMyPlayer().obj.rotation.y
+      var rotL = game.returnMyPlayer().lufa.rotation.z
+      var move = {
+        rotateOBJ: rot,
+        rotateL: rotL
+      }
+      net.send(move);
+
       game.returnMyPlayer().kulaPosition();
+
 
       cameraRotation -= movementX * 0.002; // zmiana rotacji kamery
       cameraRotation = Math.max(game.returnMyPlayer().obj.rotation.y - Math.PI * 1.25, Math.min(game.returnMyPlayer().obj.rotation.y - Math.PI * 0.75, cameraRotation));
