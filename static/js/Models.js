@@ -10,26 +10,28 @@ function Models() {
     loader.load(url, function(geometry) {
       if (url == "mats/lufa.json") {
         geometry.translate((1.3), (-3.3), 0)
-        var material = new THREE.MeshNormalMaterial({
-          // // light
-          // specular: '#ffffff',
-          // // intermediate
-          // color: '#000000',
-          // // dark
-          // emissive: '#333333',
-          // shininess: 100
+        var material = new THREE.MeshPhongMaterial({
+          color: 0x000707,
+          specular: 0x00231f,
+          shininess: 80,
+          morphTargets: true,
+          vertexColors: THREE.FaceColors,
+          flatShading: true
         });
       } else if (url == "mats/kolo.json") {
         geometry.translate((0), (-3), 0)
-        var material = new THREE.MeshNormalMaterial({
-          // map: THREE.ImageUtils.loadTexture("mats/drewno.jpg"),
-          // shininess: 50,
-          // side: THREE.DoubleSide,
-          //  morphTargets: true // odpowiada za animację materiału modelu
+        var material = new THREE.MeshPhongMaterial({
+          color: 0x0a1105,
+          specular: 0x091600,
+          shininess: 50,
+          morphTargets: true,
+          vertexColors: THREE.FaceColors,
+          flatShading: true
         });
       }
       mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(0, 0, 0);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
       callback(mesh);
     });
   }

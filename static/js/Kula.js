@@ -8,8 +8,15 @@ function Kula(player){
     this.shotTime = 0;
     this.added = false;
 
-    var geometry = new THREE.SphereGeometry( 30, 32, 32 );
-    var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    var geometry = new THREE.SphereGeometry( 20, 20, 20 );
+    var material = new THREE.MeshPhongMaterial({
+      color: 0x000000,
+      specular: 0x00231f,
+      shininess: 80,
+      morphTargets: true,
+      vertexColors: THREE.FaceColors,
+      flatShading: true
+    });
     this.sphere = new THREE.Mesh( geometry, material );
 
     this.kulaPosition = function(angle, rotation, armataPosition_x, armataPosition_z){
