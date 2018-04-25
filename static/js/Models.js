@@ -1,4 +1,4 @@
-function Model() {
+function Models() {
 
     var container = new THREE.Object3D
     var mixer
