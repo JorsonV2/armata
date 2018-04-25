@@ -10,14 +10,41 @@ function Game() {
 
   var init = function() {
 
-    var renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({
+      antialias: true
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
+
     $('#start').remove();
     $('<div id="root"></div>').appendTo('body');
     $("#root").append(renderer.domElement);
 
+    renderer.gammaInput = true;
+    renderer.gammaOutput = true;
+
+    renderer.shadowMap.enabled = true;
+    //skybox
+
+    var imagePrefix = "mats/dawnmountain-";
+    var directions = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
+    var imageSuffix = ".png";
+
+    var materialArray = [];
+    for (var i = 0; i < 6; i++)
+      materialArray.push(new THREE.MeshBasicMaterial({
+        map: THREE.ImageUtils.loadTexture(imagePrefix + directions[i] + imageSuffix),
+        side: THREE.BackSide
+      }));
+
+    var skyGeometry = new THREE.CubeGeometry(10000, 10000, 10000);
+    var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
+    var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+    //skyBox.rotation.x += Math.PI / 2;
+    scene.add(skyBox);
+
     // podłoga
-    var plane = new THREE.PlaneGeometry(10000, 10000, 100, 100)
+    var plane = new THREE.PlaneGeometry(10000, 10000, 50, 50)
     var material = new THREE.MeshBasicMaterial({
       color: 0x8888ff,
       side: THREE.DoubleSide,
@@ -29,13 +56,12 @@ function Game() {
     var pl = new THREE.Mesh(plane, material);
     pl.rotateX(Math.PI / 2);
 
-    // Bardzo dziwne gowno #stefan kazał
     scene.add(pl);
+
     var clock = new THREE.Clock();
     let axes = new THREE.AxesHelper(1000);
     scene.add(axes);
-    renderer.setClearColor(0xffffff);
-    scene.castShadow = true
+  //  scene.castShadow = true
     ////////////
 
     //------- Poruszanie kamerą oraz celownikiem --------------
@@ -45,15 +71,39 @@ function Game() {
     scene.add(flightLine.flightLine);
 
     //////////////////////////////////////////////////////////////////////////////////////////
+    //test swiatł
 
-    var light = new THREE.AmbientLight(0x404040); // soft white light
-    scene.add(light);
+    var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
+  //  hemiLight.color.setHSL(0.6, 1, 0.6);
+    hemiLight.groundColor.setHSL(0.095, 1, 0.75);
+    hemiLight.position.set(0, 50, 0);
+    scene.add(hemiLight);
+
+    var dirLight = new THREE.DirectionalLight(0xffffff, 1);
+  //  dirLight.color.setHSL(0.1, 1, 0.95);
+    dirLight.position.set(-1, 1.75, 1);
+    dirLight.position.multiplyScalar(30);
+    scene.add(dirLight);
+
+    //dirLight.castShadow = true;
+
+    //dirLight.shadow.mapSize.width = 2048;
+    //dirLight.shadow.mapSize.height = 2048;
+
+  //  var d = 50;
+
+  //  dirLight.shadow.camera.left = -d;
+    //dirLight.shadow.camera.right = d;
+  //  dirLight.shadow.camera.top = d;
+  //  dirLight.shadow.camera.bottom = -d;
+
+  //  dirLight.shadow.camera.far = 3500;
+  //  dirLight.shadow.bias = -0.0001;
+
+    //////////////////////////////////////////////////////////////////
 
     function render() {
       var delta = clock.getDelta();
-
-      renderer.shadowMap.enabled = true
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 
       //------- Akcje dla klikniętych klawiszy --------------
@@ -191,9 +241,6 @@ function Game() {
       }
 
       requestAnimationFrame(render);
-
-      renderer.shadowMap.enabled = true
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
       renderer.render(scene, camera);
     }
