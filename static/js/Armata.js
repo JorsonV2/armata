@@ -2,6 +2,8 @@ function Armata(data) {
   this.id = data.id;
   this.name = data.name;
   this.lufa;
+  this.kolo1;
+  this.kolo2;
   this.x = data.x
   this.z = data.z;
   this.rotate = data.rotateArmata;
@@ -48,11 +50,13 @@ function Armata(data) {
   kolo1.rotateY(Math.PI / 2)
   //kolo1.rotateZ(Math.PI ) //obrot koła
   kolo1.position.set(53, 45, 0)
+  this.kolo1 = kolo1;
 
   var kolo2 = models.kolo.clone();
   kolo2.scale.set(15, 15, 15)
   kolo2.rotateY(Math.PI / 2)
   kolo2.position.set(-53, 45, 0)
+  this.kolo2 = kolo2;
 
   this.sprite.position.y = 200;
   //this.sprite.position.x = -30

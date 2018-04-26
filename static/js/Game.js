@@ -117,6 +117,8 @@ function Game() {
         net.send(move);
         MyPlayer.x += 10 * MyPlayer.obj.getWorldDirection().x
         MyPlayer.z += 10 * MyPlayer.obj.getWorldDirection().z
+        MyPlayer.kolo1.rotation.z += 0.1;
+        MyPlayer.kolo2.rotation.z += 0.1;
         MyPlayer.positionF();
       }
       if (ui.map[83]) { // tył: s
@@ -128,6 +130,8 @@ function Game() {
         net.send(move);
         MyPlayer.x -= 10 * MyPlayer.obj.getWorldDirection().x
         MyPlayer.z -= 10 * MyPlayer.obj.getWorldDirection().z
+        MyPlayer.kolo1.rotation.z -= 0.1;
+        MyPlayer.kolo2.rotation.z -= 0.1;
         MyPlayer.positionF();
       }
       if (ui.map[65]) { // obrót kamery w lewo: a
@@ -306,15 +310,18 @@ function Game() {
         } else if (data.move == "w") {
           pl.x = data.x;
           pl.z = data.z;
+          pl.kolo1.rotation.z += 0.1;
+          pl.kolo2.rotation.z += 0.1;
           pl.positionF();
         } else if (data.move == "s") {
           pl.x = data.x;
           pl.z = data.z;
+          pl.kolo1.rotation.z -= 0.1;
+          pl.kolo2.rotation.z -= 0.1;
           pl.positionF();
         }
       }
     }
-
   }
 
   function MyPlayerUpdate() {
