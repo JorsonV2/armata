@@ -11,8 +11,8 @@ function Armata(data) {
   this.sprite = new makeTextSprite(this.name);
   this.kula = [];
   this.kula.push(new Kula());
-  this.power = 250;
-  this.reload = 0.2;
+  this.power = 100;
+  this.reload = 5;
 
   this.rotateF = function() {
     this.obj.rotation.y = this.rotate;

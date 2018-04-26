@@ -9,6 +9,11 @@ function Game() {
   var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
 
   var init = function() {
+    window.addEventListener('resize', function() {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+    });
 
     renderer = new THREE.WebGLRenderer({
       antialias: true
@@ -61,7 +66,7 @@ function Game() {
     var clock = new THREE.Clock();
     let axes = new THREE.AxesHelper(1000);
     scene.add(axes);
-  //  scene.castShadow = true
+    //  scene.castShadow = true
     ////////////
 
     //------- Poruszanie kamerą oraz celownikiem --------------
@@ -74,13 +79,13 @@ function Game() {
     //test swiatł
 
     var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
-  //  hemiLight.color.setHSL(0.6, 1, 0.6);
+    //  hemiLight.color.setHSL(0.6, 1, 0.6);
     hemiLight.groundColor.setHSL(0.095, 1, 0.75);
     hemiLight.position.set(0, 50, 0);
     scene.add(hemiLight);
 
     var dirLight = new THREE.DirectionalLight(0xffffff, 1);
-  //  dirLight.color.setHSL(0.1, 1, 0.95);
+    //  dirLight.color.setHSL(0.1, 1, 0.95);
     dirLight.position.set(-1, 1.75, 1);
     dirLight.position.multiplyScalar(30);
     scene.add(dirLight);
@@ -90,15 +95,15 @@ function Game() {
     //dirLight.shadow.mapSize.width = 2048;
     //dirLight.shadow.mapSize.height = 2048;
 
-  //  var d = 50;
+    //  var d = 50;
 
-  //  dirLight.shadow.camera.left = -d;
+    //  dirLight.shadow.camera.left = -d;
     //dirLight.shadow.camera.right = d;
-  //  dirLight.shadow.camera.top = d;
-  //  dirLight.shadow.camera.bottom = -d;
+    //  dirLight.shadow.camera.top = d;
+    //  dirLight.shadow.camera.bottom = -d;
 
-  //  dirLight.shadow.camera.far = 3500;
-  //  dirLight.shadow.bias = -0.0001;
+    //  dirLight.shadow.camera.far = 3500;
+    //  dirLight.shadow.bias = -0.0001;
 
     //////////////////////////////////////////////////////////////////
 
