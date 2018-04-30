@@ -2,8 +2,8 @@ function Ui() {
 var element = document.body;
   //------- Start gry --------------
   $("#btn_Go").on("click", function() {
-    new_game();
     net.connect();
+    new_game();
 
     //obsługa myszki
     element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
