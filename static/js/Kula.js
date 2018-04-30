@@ -18,10 +18,10 @@ function Kula(){
     });
     this.sphere = new THREE.Mesh( geometry, material );
 
-    this.kulaPosition = function(angle, rotation, armataPosition_x, armataPosition_z){
-      this.sphere.position.z = 200 * Math.sin(angle) * Math.cos(rotation) + armataPosition_z;
-      this.sphere.position.x = 200 * Math.sin(angle) * Math.sin(rotation) + armataPosition_x;
-      this.sphere.position.y = 200 * Math.cos(angle) + 60;
+    this.kulaPosition = function(angle, rotation, centerPosition_x, centerPosition_z, centerPosition_y){
+      this.sphere.position.z = 200 * Math.sin(angle) * Math.cos(rotation) + centerPosition_z;
+      this.sphere.position.x = 200 * Math.sin(angle) * Math.sin(rotation) + centerPosition_x;
+      this.sphere.position.y = 200 * Math.cos(angle) + centerPosition_y;
     }
 
     this.setKulaShotPosition = function(){

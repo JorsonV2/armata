@@ -9,7 +9,9 @@ function Models() {
 
     loader.load(url, function(geometry) {
       if (url == "mats/lufa.json") {
-        geometry.translate((1.3), (-3.3), 0)
+        geometry.rotateX(Math.PI * 0.002);
+        geometry.rotateZ(Math.PI * 0.002);
+        geometry.translate((1.3), (-3.3), 0);
         var material = new THREE.MeshPhongMaterial({
           color: 0x000707,
           specular: 0x00231f,

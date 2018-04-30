@@ -1,4 +1,4 @@
-cameraRotation = -Math.PI * 0.75;
+cameraRotation = -Math.PI * 0.20;
 
 function Game() {
   var MyPlayer;
@@ -120,11 +120,11 @@ function Game() {
           Direction_z: (MyPlayer.obj.getWorldDirection().z)
         }
         net.send(move);
-        MyPlayer.x += 10 * MyPlayer.obj.getWorldDirection().x
-        MyPlayer.z += 10 * MyPlayer.obj.getWorldDirection().z
         MyPlayer.kolo1.rotation.z += 0.1;
         MyPlayer.kolo2.rotation.z += 0.1;
-        MyPlayer.positionF();
+        MyPlayer.obj.position.x += 10 * MyPlayer.obj.getWorldDirection().x;
+        MyPlayer.obj.position.z += 10 * MyPlayer.obj.getWorldDirection().z;
+        MyPlayer.kulaPosition();
       }
       if (ui.map[83]) { // tył: s
         var move = {
@@ -133,19 +133,19 @@ function Game() {
           Direction_z: (MyPlayer.obj.getWorldDirection().z)
         }
         net.send(move);
-        MyPlayer.x -= 10 * MyPlayer.obj.getWorldDirection().x
-        MyPlayer.z -= 10 * MyPlayer.obj.getWorldDirection().z
         MyPlayer.kolo1.rotation.z -= 0.1;
         MyPlayer.kolo2.rotation.z -= 0.1;
-        MyPlayer.positionF();
+        MyPlayer.obj.position.x -= 10 * MyPlayer.obj.getWorldDirection().x;
+        MyPlayer.obj.position.z -= 10 * MyPlayer.obj.getWorldDirection().z;
+        MyPlayer.kulaPosition();
       }
       if (ui.map[65]) { // obrót kamery w lewo: a
         cameraRotation -= 0.02;
-        cameraRotation = Math.max(MyPlayer.obj.rotation.y - Math.PI * 1.25, Math.min(MyPlayer.obj.rotation.y - Math.PI * 0.75, cameraRotation));
+        cameraRotation = Math.max(MyPlayer.obj.rotation.y - Math.PI * 1.25, Math.min(MyPlayer.obj.rotation.y - Math.PI * 0.0, cameraRotation));
       }
       if (ui.map[68]) { // obrót kamery w prawo: d
         cameraRotation += 0.02;
-        cameraRotation = Math.max(MyPlayer.obj.rotation.y - Math.PI * 1.25, Math.min(MyPlayer.obj.rotation.y - Math.PI * 0.75, cameraRotation));
+        cameraRotation = Math.max(MyPlayer.obj.rotation.y - Math.PI * 1.25, Math.min(MyPlayer.obj.rotation.y - Math.PI * 0.0, cameraRotation));
       }
       if (ui.map[32]) {
         for (var i = 0; i < MyPlayer.kula.length; i++) {
@@ -153,9 +153,8 @@ function Game() {
             MyPlayer.kula[i].isShot = true;
             MyPlayer.kula[i].power = MyPlayer.power;
             MyPlayer.kula[i].kulaShotPosition = MyPlayer.kula[i].sphere.position.clone();
-            MyPlayer.kula[i].armataShotPosition = MyPlayer.obj.position.clone();
+            MyPlayer.kula[i].armataShotPosition = MyPlayer.lufaCenterVector.clone();
             MyPlayer.kula[i].armataShotAngle = MyPlayer.lufa.rotation.z;
-            console.log(MyPlayer.obj.position, MyPlayer.lufa.geometry)
           }
         }
       }
@@ -176,17 +175,17 @@ function Game() {
         curveTime = 0;
         curvePath = [];
         curveVector = new THREE.Vector3(
-          200 * Math.sin(angle) * Math.sin(rotation) + MyPlayer.obj.position.x,
-          200 * Math.cos(angle) + 60,
-          200 * Math.sin(angle) * Math.cos(rotation) + MyPlayer.obj.position.z
+          200 * Math.sin(angle) * Math.sin(rotation) + MyPlayer.lufaCenterVector.x,
+          200 * Math.cos(angle) + MyPlayer.lufaCenterVector.y,
+          200 * Math.sin(angle) * Math.cos(rotation) + MyPlayer.lufaCenterVector.z
         );
 
         while (curveVector.y > 0) {
           curvePath.push(curveVector);
           curveTime += 0.05;
           curveVector = new THREE.Vector3(0, 0, 0);
-          curveVector.x = MyPlayer.power * curveTime * ((curvePath[0].x - MyPlayer.obj.position.x) / (curvePath[0].y - MyPlayer.obj.position.y)) + curvePath[0].x;
-          curveVector.z = MyPlayer.power * curveTime * ((curvePath[0].z - MyPlayer.obj.position.z) / (curvePath[0].y - MyPlayer.obj.position.y)) + curvePath[0].z;
+          curveVector.x = MyPlayer.power * curveTime * ((curvePath[0].x - MyPlayer.lufaCenterVector.x) / (curvePath[0].y - MyPlayer.lufaCenterVector.y)) + curvePath[0].x;
+          curveVector.z = MyPlayer.power * curveTime * ((curvePath[0].z - MyPlayer.lufaCenterVector.z) / (curvePath[0].y - MyPlayer.lufaCenterVector.y)) + curvePath[0].z;
           curveVector.y = MyPlayer.power * curveTime * Math.cos(angle) - ((10 * curveTime * curveTime) / 2) + curvePath[0].y;
         }
 
@@ -199,8 +198,9 @@ function Game() {
         target.target.position.x = curvePath[curvePath.length - 1].x;
 
         camera.lookAt(target.target.position);
+        //camera.lookAt(MyPlayer.kula[0].sphere.position);
+        //camera.lookAt(MyPlayer.obj.position);
         //----------------------------------------------------------------------
-
       }
 
       for (var i = 0; i < Players.length; i++) { // Wykonywane dla wszystkich playerów
@@ -212,7 +212,7 @@ function Game() {
 
               if (MyPlayer.kula[j].sphere.position.y > 0) {
                 if (MyPlayer.kula[j].shotTime > MyPlayer.reload && Players[i].kula[j].added == false) { // jeżeli leci dłużej niż x ładuje się 2
-                  kula = new Kula(true);
+                  kula = new Kula();
                   MyPlayer.kula.push(kula);
                   MyPlayer.kulaPosition();
                   scene.add(MyPlayer.kula[MyPlayer.kula.length - 1].sphere)
@@ -252,6 +252,7 @@ function Game() {
       requestAnimationFrame(render);
 
       renderer.render(scene, camera);
+
     }
     render();
   }
