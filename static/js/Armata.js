@@ -12,7 +12,7 @@ function Armata(data) {
   this.sprite = new makeTextSprite(this.name);
   this.kula = [];
   this.kula.push(new Kula());
-  this.power = 100;
+  this.power = 150;
   this.reload = 5;
 
   var container = new THREE.Object3D();

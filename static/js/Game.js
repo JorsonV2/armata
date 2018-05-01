@@ -90,6 +90,11 @@ function Game() {
     dirLight.position.multiplyScalar(30);
     scene.add(dirLight);
 
+    var trial = new Trial();
+
+    var isShaking = false;
+    var shakingTime = 2;
+
     //dirLight.castShadow = true;
 
     //dirLight.shadow.mapSize.width = 2048;
@@ -109,7 +114,6 @@ function Game() {
 
     function render() {
       var delta = clock.getDelta();
-
 
       //------- Akcje dla klikniętych klawiszy --------------
 
@@ -149,6 +153,7 @@ function Game() {
       }
       if (ui.map[32]) {
         for (var i = 0; i < MyPlayer.kula.length; i++) {
+          isShaking = true;
           if (MyPlayer.kula[i].shotTime == 0) {
             MyPlayer.kula[i].isShot = true;
             MyPlayer.kula[i].power = MyPlayer.power;
@@ -167,6 +172,17 @@ function Game() {
         camera.position.x = 600 * Math.sin(cameraRotation) + MyPlayer.obj.position.x;
         camera.position.y = 300;
 
+        if(isShaking){
+          camera.position.z += Math.random() * 50 - 25;
+          camera.position.x += Math.random() * 50 - 25;
+          camera.position.y += Math.random() * 50 - 25;
+          shakingTime -= 0.1;
+          if(shakingTime < 0){
+            isShaking = false;
+            shakingTime = 2;
+          }
+        }
+
 
         angle = MyPlayer.lufa.rotation.z;
         rotation = MyPlayer.obj.rotation.y;
@@ -184,17 +200,16 @@ function Game() {
           curvePath.push(curveVector);
           curveTime += 0.05;
           curveVector = new THREE.Vector3(0, 0, 0);
-          curveVector.x = MyPlayer.power * curveTime * ((curvePath[0].x - MyPlayer.lufaCenterVector.x) / (curvePath[0].y - MyPlayer.lufaCenterVector.y)) + curvePath[0].x;
-          curveVector.z = MyPlayer.power * curveTime * ((curvePath[0].z - MyPlayer.lufaCenterVector.z) / (curvePath[0].y - MyPlayer.lufaCenterVector.y)) + curvePath[0].z;
+          curveVector.x = MyPlayer.power * curveTime * ((curvePath[0].x - MyPlayer.lufaCenterVector.x) / (curvePath[0].y + 40 - MyPlayer.lufaCenterVector.y)) + curvePath[0].x;
+          curveVector.z = MyPlayer.power * curveTime * ((curvePath[0].z - MyPlayer.lufaCenterVector.z) / (curvePath[0].y + 40 - MyPlayer.lufaCenterVector.y)) + curvePath[0].z;
           curveVector.y = MyPlayer.power * curveTime * Math.cos(angle) - ((10 * curveTime * curveTime) / 2) + curvePath[0].y;
         }
-
         curve = new THREE.CatmullRomCurve3(curvePath);
         points = curve.getPoints(curvePath.length - 1);
         geometry = new THREE.BufferGeometry().setFromPoints(points);
         flightLine.flightLine.geometry = geometry;
 
-        target.target.position.z = curvePath[curvePath.length - 1].z //Math.cos(rotation) * (Math.pow(150, 2) * Math.sin(2 * angle) / 10) + MyPlayer.kula.sphere.position.z;
+        target.target.position.z = curvePath[curvePath.length - 1].z; //Math.cos(rotation) * (Math.pow(150, 2) * Math.sin(2 * angle) / 10) + MyPlayer.kula.sphere.position.z;
         target.target.position.x = curvePath[curvePath.length - 1].x;
 
         camera.lookAt(target.target.position);
@@ -210,6 +225,24 @@ function Game() {
 
               MyPlayer.kula[j].setKulaShotPosition(); //ustalenie jej pozycji
 
+              //-------------------- Ścierzka za pociskiem -------------------------
+
+              if(MyPlayer.kula[j].shotTime%0.9 < 0.9 && MyPlayer.kula[j].shotTime%0.9 > 0.75){
+                var sprite = trial.sprite.clone();
+                sprite.position.set(MyPlayer.kula[j].sphere.position.x, MyPlayer.kula[j].sphere.position.y, MyPlayer.kula[j].sphere.position.z)
+                scene.add(sprite);
+                MyPlayer.kula[j].path.push(sprite)
+
+                if(MyPlayer.kula[j].path.length > 7){
+                  scene.remove(MyPlayer.kula[j].path.shift());
+                }
+
+                for(var z = 0; z < MyPlayer.kula[j].path.length; z++){
+                  MyPlayer.kula[j].path[z].scale.set(2 * (z + 5), 2 * (z + 5), 1);
+                }
+              }
+              //-----------------------------------------------------------------------------
+
               if (MyPlayer.kula[j].sphere.position.y > 0) {
                 if (MyPlayer.kula[j].shotTime > MyPlayer.reload && Players[i].kula[j].added == false) { // jeżeli leci dłużej niż x ładuje się 2
                   kula = new Kula();
@@ -224,6 +257,9 @@ function Game() {
 
               if (Players[i].kula[j].sphere.position.y < 0) {
                 scene.remove(MyPlayer.kula[j].sphere);
+                for(var z = 0; z < MyPlayer.kula[j].path.length; z++){
+                  scene.remove(MyPlayer.kula[j].path[z])
+                }
                 MyPlayer.kula.splice(j, 1);
                 //console.log(Players[i].kula)
               }
@@ -232,9 +268,29 @@ function Game() {
         } else { // wykonuje się dla wszyskich playerów oprucz gracza
           for (var j = 0; j < Players[i].kula.length; j++) {
             if (Players[i].kula[j].isShot == true) {
+
               Players[i].kula[j].setKulaShotPosition();
-              if (Players[i].kula[j].shotTime > 3 && Players[i].kula[j].added == false) {
-                kula = new Kula(true);
+
+              //-------------------- Ścierzka za pociskiem -------------------------
+
+              if(Players[i].kula[j].shotTime%0.45 < 0.45 && Players[i].kula[j].shotTime%0.45 > 0.3){
+                var sprite = trial.sprite.clone();
+                sprite.position.set(Players[i].kula[j].sphere.position.x, Players[i].kula[j].sphere.position.y, Players[i].kula[j].sphere.position.z)
+                scene.add(sprite);
+                Players[i].kula[j].path.push(sprite)
+
+                if(Players[i].kula[j].path.length > 15){
+                  scene.remove(Players[i].kula[j].path.shift());
+                }
+
+                for(var z = 0; z < Players[i].kula[j].path.length; z++){
+                  Players[i].kula[j].path[z].scale.set(1.5 * (z + 3), 1.5 * (z + 3), 1);
+                }
+              }
+              //-----------------------------------------------------------------------------
+
+              if (Players[i].kula[j].shotTime > Players[i].reload && Players[i].kula[j].added == false) {
+                kula = new Kula();
                 Players[i].kula.push(kula);
                 Players[i].kula[j].added = true;
               }
