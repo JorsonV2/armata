@@ -176,7 +176,7 @@ function Game() {
           camera.position.z += Math.random() * 50 - 25;
           camera.position.x += Math.random() * 50 - 25;
           camera.position.y += Math.random() * 50 - 25;
-          shakingTime -= 0.1;
+          shakingTime -= 0.15;
           if(shakingTime < 0){
             isShaking = false;
             shakingTime = 2;
@@ -227,18 +227,18 @@ function Game() {
 
               //-------------------- Ścierzka za pociskiem -------------------------
 
-              if(MyPlayer.kula[j].shotTime%0.9 < 0.9 && MyPlayer.kula[j].shotTime%0.9 > 0.75){
+              if(MyPlayer.kula[j].shotTime%0.5 < 0.5 && MyPlayer.kula[j].shotTime%0.5 > 0.35){
                 var sprite = trial.sprite.clone();
                 sprite.position.set(MyPlayer.kula[j].sphere.position.x, MyPlayer.kula[j].sphere.position.y, MyPlayer.kula[j].sphere.position.z)
                 scene.add(sprite);
                 MyPlayer.kula[j].path.push(sprite)
 
-                if(MyPlayer.kula[j].path.length > 7){
+                if(MyPlayer.kula[j].path.length > 8){
                   scene.remove(MyPlayer.kula[j].path.shift());
                 }
 
                 for(var z = 0; z < MyPlayer.kula[j].path.length; z++){
-                  MyPlayer.kula[j].path[z].scale.set(2 * (z + 5), 2 * (z + 5), 1);
+                  MyPlayer.kula[j].path[z].scale.set(2 * (z + 10), 2 * (z + 10), 1);
                 }
               }
               //-----------------------------------------------------------------------------
