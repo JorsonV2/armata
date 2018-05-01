@@ -32,8 +32,6 @@ function Models() {
         });
       }
       mesh = new THREE.Mesh(geometry, material);
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
       callback(mesh);
     });
   }
@@ -46,5 +44,37 @@ function Models() {
   loadModel("mats/kolo.json", this, function(data) {
     that.kolo = data;
   })
+
+  /////////////////////////////////////////////////////////
+  var geometry = new THREE.SphereGeometry(30, 30, 30);
+  var material1 = new THREE.MeshPhongMaterial({
+    opacity: 0.3,
+    transparent: true,
+    shininess: 100,
+    morphTargets: true,
+    vertexColors: THREE.FaceColors,
+    flatShading: true,
+  });
+
+  var textureLoader = new THREE.TextureLoader();
+  textureLoader.load("mats/sun.jpg", function(map) {
+    map.anisotropy = 8;
+    material1.map = map;
+    material1.needsUpdate = true;
+  });
+
+  this.bum = new THREE.Mesh(geometry, material1);
+
+  /////////////////////////////////////////////////////////
+
+  var grassTexture = THREE.ImageUtils.loadTexture("mats/grass-sprit.png");
+  var grassMaterial = new THREE.SpriteMaterial({
+    map: grassTexture,
+    opacity: 0.9,
+    useScreenCoordinates: true
+  });
+  this.grass = new THREE.Sprite(grassMaterial);
+  this.grass.scale.set(60,60,60);
+  this.grass.position.set(0,30,0);
 
 }

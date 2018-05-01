@@ -4,6 +4,7 @@ function Game() {
   var MyPlayer;
   var Players = [];
   var Nicks = [];
+  var allBum = [];
   var MyPlayer;
   var scene = new THREE.Scene();
   var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
@@ -42,26 +43,30 @@ function Game() {
         side: THREE.BackSide
       }));
 
-    var skyGeometry = new THREE.CubeGeometry(10000, 10000, 10000);
+    var skyGeometry = new THREE.CubeGeometry(13000, 13000, 13000);
     var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
     var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
     //skyBox.rotation.x += Math.PI / 2;
     scene.add(skyBox);
 
     // podłoga
-    var plane = new THREE.PlaneGeometry(10000, 10000, 50, 50)
-    var material = new THREE.MeshBasicMaterial({
-      color: 0x8888ff,
-      side: THREE.DoubleSide,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.5
+
+    var floorTexture = new THREE.ImageUtils.loadTexture('mats/grass3.jpg');
+    floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+    floorTexture.repeat.set(30, 30);
+    var floorMaterial = new THREE.MeshPhongMaterial({
+      shininess: 120,
+      morphTargets: true,
+      vertexColors: THREE.FaceColors,
+      flatShading: true,
+      map: floorTexture,
+      side: THREE.DoubleSide
     });
-
-    var pl = new THREE.Mesh(plane, material);
-    pl.rotateX(Math.PI / 2);
-
-    scene.add(pl);
+    var floorGeometry = new THREE.PlaneGeometry(10000, 10000, 10, 10);
+    var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+    //floor.position.y = -0.5;
+    floor.rotation.x = Math.PI / 2;
+    scene.add(floor);
 
     var clock = new THREE.Clock();
     let axes = new THREE.AxesHelper(1000);
@@ -78,15 +83,12 @@ function Game() {
     //////////////////////////////////////////////////////////////////////////////////////////
     //test swiatł
 
-    var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
-    //  hemiLight.color.setHSL(0.6, 1, 0.6);
-    hemiLight.groundColor.setHSL(0.095, 1, 0.75);
-    hemiLight.position.set(0, 50, 0);
+    var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.5);
+    hemiLight.position.set(0, 500, 0);
     scene.add(hemiLight);
 
-    var dirLight = new THREE.DirectionalLight(0xffffff, 1);
-    //  dirLight.color.setHSL(0.1, 1, 0.95);
-    dirLight.position.set(-1, 1.75, 1);
+    var dirLight = new THREE.DirectionalLight(0xffffff, 1)
+    dirLight.position.set(-100, 200, 100);
     dirLight.position.multiplyScalar(30);
     scene.add(dirLight);
 
@@ -112,6 +114,13 @@ function Game() {
 
     //////////////////////////////////////////////////////////////////
 
+    for(var i = 0; i< 1000; i++){
+      var grass = models.grass.clone();
+      grass.position.x = Math.floor(Math.random() *(10000+1)-5000);
+      grass.position.z = Math.floor(Math.random() *(10000+1)-5000);
+      scene.add(grass)
+    }
+    
     function render() {
       var delta = clock.getDelta();
 
@@ -172,12 +181,12 @@ function Game() {
         camera.position.x = 600 * Math.sin(cameraRotation) + MyPlayer.obj.position.x;
         camera.position.y = 300;
 
-        if(isShaking){
+        if (isShaking) {
           camera.position.z += Math.random() * 50 - 25;
           camera.position.x += Math.random() * 50 - 25;
           camera.position.y += Math.random() * 50 - 25;
           shakingTime -= 0.15;
-          if(shakingTime < 0){
+          if (shakingTime < 0) {
             isShaking = false;
             shakingTime = 2;
           }
@@ -227,17 +236,17 @@ function Game() {
 
               //-------------------- Ścierzka za pociskiem -------------------------
 
-              if(MyPlayer.kula[j].shotTime%0.5 < 0.5 && MyPlayer.kula[j].shotTime%0.5 > 0.35){
+              if (MyPlayer.kula[j].shotTime % 0.5 < 0.5 && MyPlayer.kula[j].shotTime % 0.5 > 0.35) {
                 var sprite = trial.sprite.clone();
                 sprite.position.set(MyPlayer.kula[j].sphere.position.x, MyPlayer.kula[j].sphere.position.y, MyPlayer.kula[j].sphere.position.z)
                 scene.add(sprite);
                 MyPlayer.kula[j].path.push(sprite)
 
-                if(MyPlayer.kula[j].path.length > 8){
+                if (MyPlayer.kula[j].path.length > 8) {
                   scene.remove(MyPlayer.kula[j].path.shift());
                 }
 
-                for(var z = 0; z < MyPlayer.kula[j].path.length; z++){
+                for (var z = 0; z < MyPlayer.kula[j].path.length; z++) {
                   MyPlayer.kula[j].path[z].scale.set(2 * (z + 10), 2 * (z + 10), 1);
                 }
               }
@@ -256,8 +265,13 @@ function Game() {
               // ------------------ Usuwanie kuli która spadła ---------------------------
 
               if (Players[i].kula[j].sphere.position.y < 0) {
+
+                var bum = new Bum((Players[i].kula[j].sphere.position.x), (Players[i].kula[j].sphere.position.z));
+                allBum.push(bum);
+                scene.add(bum.container);
+
                 scene.remove(MyPlayer.kula[j].sphere);
-                for(var z = 0; z < MyPlayer.kula[j].path.length; z++){
+                for (var z = 0; z < MyPlayer.kula[j].path.length; z++) {
                   scene.remove(MyPlayer.kula[j].path[z])
                 }
                 MyPlayer.kula.splice(j, 1);
@@ -273,25 +287,24 @@ function Game() {
 
               //-------------------- Ścierzka za pociskiem -------------------------
 
-              if(Players[i].kula[j].shotTime%0.45 < 0.45 && Players[i].kula[j].shotTime%0.45 > 0.3){
+              if (Players[i].kula[j].shotTime % 0.45 < 0.45 && Players[i].kula[j].shotTime % 0.45 > 0.3) {
                 var sprite = trial.sprite.clone();
                 sprite.position.set(Players[i].kula[j].sphere.position.x, Players[i].kula[j].sphere.position.y, Players[i].kula[j].sphere.position.z)
                 scene.add(sprite);
                 Players[i].kula[j].path.push(sprite)
 
-                if(Players[i].kula[j].path.length > 15){
+                if (Players[i].kula[j].path.length > 15) {
                   scene.remove(Players[i].kula[j].path.shift());
                 }
 
-                for(var z = 0; z < Players[i].kula[j].path.length; z++){
+                for (var z = 0; z < Players[i].kula[j].path.length; z++) {
                   Players[i].kula[j].path[z].scale.set(1.5 * (z + 3), 1.5 * (z + 3), 1);
                 }
               }
               //-----------------------------------------------------------------------------
 
               if (Players[i].kula[j].shotTime > Players[i].reload && Players[i].kula[j].added == false) {
-                kula = new Kula();
-                Players[i].kula.push(kula);
+                Players[i].kula.push(new Kula());
                 Players[i].kula[j].added = true;
               }
             }
@@ -302,6 +315,18 @@ function Game() {
           Players[i].kulaPosition();
           scene.add(Players[i].kula[0].sphere)
           //console.log(Players[i].kula)
+        }
+      }
+
+      if (allBum.length > 0) {
+        for (var i = 0; i < allBum.length; i++) {
+          var s = allBum[i].scale;
+          allBum[i].scale += 2;
+          allBum[i].bumOBJ.scale.set(s, s, s);
+          if ((allBum[i].scale) > 25) {
+            scene.remove((allBum[i].container))
+            allBum.splice(i, 1);
+          }
         }
       }
 
