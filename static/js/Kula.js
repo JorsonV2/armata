@@ -1,5 +1,5 @@
-function Kula(){
-    this.isShot = false;
+function Kula(owner){
+    this.owner = owner;
     this.kulaShotPosition;
     this.armataShotPosition;
     this.armataShotAngle;
@@ -25,7 +25,7 @@ function Kula(){
       this.sphere.position.y = 200 * Math.cos(angle) + centerPosition_y;
     }
 
-    this.setKulaShotPosition = function(){
+    this.setKulaShotPosition = function(delta){
       // pozycja_kuli = siła * czas * cotangens_kąta_pochylenia_lufy + początkowa_pozycja_kuli
 
       this.sphere.position.x = this.power * this.shotTime * ((this.kulaShotPosition.x - this.armataShotPosition.x) / (this.kulaShotPosition.y + 40 - this.armataShotPosition.y)) + this.kulaShotPosition.x;
@@ -33,6 +33,6 @@ function Kula(){
       // pozycja _kuli = siła * czas * cosinus_kąta_pochylenia_lufy
       this.sphere.position.y = this.power * this.shotTime * Math.cos(this.armataShotAngle) - ((10 * this.shotTime * this.shotTime) / 2) + this.kulaShotPosition.y;
       //console.log(this.kulaShotPosition.x)
-      this.shotTime += 0.15;
+      this.shotTime += delta * 10;
     }
 }

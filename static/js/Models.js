@@ -77,4 +77,11 @@ function Models() {
   this.grass.scale.set(60,60,60);
   this.grass.position.set(0,30,0);
 
+  //////////////////////////////////////////////////////////////
+
+  var trialTexture = THREE.ImageUtils.loadTexture("mats/trial.png");
+  var trialMaterial = new THREE.SpriteMaterial( { map: trialTexture, opacity: 0.6, useScreenCoordinates: true} );
+	this.trial = new THREE.Sprite( trialMaterial );
+
+
 }

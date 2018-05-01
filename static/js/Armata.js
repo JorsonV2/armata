@@ -10,10 +10,9 @@ function Armata(data) {
   this.rotate = data.rotateArmata;
   this.rotateL = data.rotateLufa;
   this.sprite = new makeTextSprite(this.name);
-  this.kula = [];
-  this.kula.push(new Kula());
+  this.kula = new Kula(this);
   this.power = 150;
-  this.reload = 1;
+  this.reload = 5;
 
   var container = new THREE.Object3D();
 
@@ -63,10 +62,8 @@ function Armata(data) {
 
   this.kulaPosition = function() {
     this.getLufaCenter();
-    for (var i = 0; i < this.kula.length; i++) {
-      if (this.kula[i].isShot == false)
-        this.kula[i].kulaPosition(this.lufa.rotation.z, this.obj.rotation.y, this.lufaCenterVector.x, this.lufaCenterVector.z, this.lufaCenterVector.y);
-    }
+    if(this.kula)
+      this.kula.kulaPosition(this.lufa.rotation.z, this.obj.rotation.y, this.lufaCenterVector.x, this.lufaCenterVector.z, this.lufaCenterVector.y);
   }
 
   this.rotateF = function() {
