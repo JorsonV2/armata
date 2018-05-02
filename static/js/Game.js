@@ -2,6 +2,7 @@ cameraRotation = -Math.PI * 0.20;
 
 function Game() {
   var that = this;
+  var recoilPlayers = [];
   var MyPlayer;
   var Players = [];
   var Nicks = [];
@@ -104,42 +105,17 @@ function Game() {
     function render() {
       var delta = clock.getDelta();
 
-      //------- Akcje dla klikniętych klawiszy --------------
-
-      if (ui.map[87]) { // przód: w
-        var move = {
-          move: "w",
-          Direction_x: (MyPlayer.obj.getWorldDirection().x),
-          Direction_z: (MyPlayer.obj.getWorldDirection().z)
+      for(var i = 0; i < recoilPlayers.length; i ++){
+        recoilPlayers[i].obj.position.x -= 500 * recoilPlayers[i].recoilTime * delta * MyPlayer.obj.getWorldDirection().x;
+        recoilPlayers[i].obj.position.z -= 500 * recoilPlayers[i].recoilTime * delta * MyPlayer.obj.getWorldDirection().z;
+        recoilPlayers[i].recoilTime -= delta * 5;
+        recoilPlayers[i].kulaPosition();
+        
+        if(recoilPlayers[i].recoilTime < 0){
+          recoilPlayers.splice(i, 1);
         }
-        net.send(move);
-        MyPlayer.kolo1.rotation.z += 0.1;
-        MyPlayer.kolo2.rotation.z += 0.1;
-        MyPlayer.obj.position.x += 10 * MyPlayer.obj.getWorldDirection().x;
-        MyPlayer.obj.position.z += 10 * MyPlayer.obj.getWorldDirection().z;
-        MyPlayer.kulaPosition();
       }
-      if (ui.map[83]) { // tył: s
-        var move = {
-          move: "s",
-          Direction_x: (MyPlayer.obj.getWorldDirection().x),
-          Direction_z: (MyPlayer.obj.getWorldDirection().z)
-        }
-        net.send(move);
-        MyPlayer.kolo1.rotation.z -= 0.1;
-        MyPlayer.kolo2.rotation.z -= 0.1;
-        MyPlayer.obj.position.x -= 10 * MyPlayer.obj.getWorldDirection().x;
-        MyPlayer.obj.position.z -= 10 * MyPlayer.obj.getWorldDirection().z;
-        MyPlayer.kulaPosition();
-      }
-      if (ui.map[65]) { // obrót kamery w lewo: a
-        cameraRotation -= 0.02;
-        cameraRotation = Math.max(MyPlayer.obj.rotation.y - Math.PI * 1.25, Math.min(MyPlayer.obj.rotation.y - Math.PI * 0.0, cameraRotation));
-      }
-      if (ui.map[68]) { // obrót kamery w prawo: d
-        cameraRotation += 0.02;
-        cameraRotation = Math.max(MyPlayer.obj.rotation.y - Math.PI * 1.25, Math.min(MyPlayer.obj.rotation.y - Math.PI * 0.0, cameraRotation));
-      }
+<<<<<<< HEAD
       if (ui.map[32]) {
         if(MyPlayer.kula){
           var rot = MyPlayer.obj.rotation.y
@@ -157,12 +133,57 @@ function Game() {
           isShaking = true;
           that.shotKula(MyPlayer.id);
         }
+=======
+>>>>>>> 29e0fc9baef22b85025e39aa137e0f596ccc142f
 
-      }
 
       // -------------- Kamera, tor lotu oraz lot kuli ---------------------------------
 
       if (MyPlayer) {
+        //------- Akcje dla klikniętych klawiszy --------------
+
+        if (ui.map[87] && MyPlayer.recoilTime <= 0) { // przód: w
+         var move = {
+           move: "w",
+            Direction_x: (MyPlayer.obj.getWorldDirection().x),
+            Direction_z: (MyPlayer.obj.getWorldDirection().z)
+          }
+          net.send(move);
+          MyPlayer.kolo1.rotation.z += 0.1;
+          MyPlayer.kolo2.rotation.z += 0.1;
+          MyPlayer.obj.position.x += 500 * delta * MyPlayer.obj.getWorldDirection().x;
+          MyPlayer.obj.position.z += 500 * delta * MyPlayer.obj.getWorldDirection().z;
+          MyPlayer.kulaPosition();
+        }
+        if (ui.map[83] && MyPlayer.recoilTime <= 0) { // tył: s
+          var move = {
+            move: "s",
+            Direction_x: (MyPlayer.obj.getWorldDirection().x),
+            Direction_z: (MyPlayer.obj.getWorldDirection().z)
+          }
+          net.send(move);
+          MyPlayer.kolo1.rotation.z -= 0.1;
+          MyPlayer.kolo2.rotation.z -= 0.1;
+          MyPlayer.obj.position.x -= 500 * delta * MyPlayer.obj.getWorldDirection().x;
+          MyPlayer.obj.position.z -= 500 * delta * MyPlayer.obj.getWorldDirection().z;
+          MyPlayer.kulaPosition();
+        }
+        if (ui.map[65]) { // obrót kamery w lewo: a
+          cameraRotation -= 0.02;
+          cameraRotation = Math.max(MyPlayer.obj.rotation.y - Math.PI * 1.25, Math.min(MyPlayer.obj.rotation.y - Math.PI * 0.0, cameraRotation));
+        }
+        if (ui.map[68]) { // obrót kamery w prawo: d
+          cameraRotation += 0.02;
+          cameraRotation = Math.max(MyPlayer.obj.rotation.y - Math.PI * 1.25, Math.min(MyPlayer.obj.rotation.y - Math.PI * 0.0, cameraRotation));
+        }
+        if (ui.map[32]) {
+          if(MyPlayer.kula){
+            isShaking = true;
+            that.shotKula(MyPlayer.id);
+          }
+
+        }
+
         // Ogracanie kamery podczas obracania playera
         camera.position.z = 600 * Math.cos(cameraRotation) + MyPlayer.obj.position.z;
         camera.position.x = 600 * Math.sin(cameraRotation) + MyPlayer.obj.position.x;
@@ -311,6 +332,9 @@ function Game() {
         Players[i].kula.armataShotAngle = Players[i].lufa.rotation.z;
         shotKule.push(Players[i].kula);
         Players[i].kula = null;
+
+        Players[i].recoilTime = 3;
+        recoilPlayers.push(Players[i]);
       }
     }
   }

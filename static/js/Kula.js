@@ -33,6 +33,6 @@ function Kula(owner){
       // pozycja _kuli = siła * czas * cosinus_kąta_pochylenia_lufy
       this.sphere.position.y = this.power * this.shotTime * Math.cos(this.armataShotAngle) - ((10 * this.shotTime * this.shotTime) / 2) + this.kulaShotPosition.y;
       //console.log(this.kulaShotPosition.x)
-      this.shotTime += delta * 10;
+      this.shotTime += delta * 15;
     }
 }
