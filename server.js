@@ -67,7 +67,7 @@ function Player(id, name) {
   this.name = name;
   this.x = Math.floor(Math.random() * 5000 - 2500)
   this.z = Math.floor(Math.random() * 5000 - 2500);
-  this.speed = 10;
+  this.speed = 500;
   this.rotateArmata = 0;
   this.rotateLufa = Math.PI * 0.3;
 }
@@ -120,8 +120,8 @@ io.sockets.on("connection", function(client) {
             id: client.id
           });
         } else if (data.move == "shot") {
-          pl.x -= pl.speed * data.Direction_x;
-          pl.z -= pl.speed * data.Direction_z;
+          // pl.x -= pl.speed * data.Direction_x;
+          // pl.z -= pl.speed * data.Direction_z;
           pl.rotateArmata = data.rotateOBJ;
           pl.rotateLufa = data.rotateL;
           client.broadcast.emit("movePlayer", {

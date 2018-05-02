@@ -95,26 +95,26 @@ function Game() {
 
     //////////////////////////////////////////////////////////////////
 
-    for(var i = 0; i< 1000; i++){
+    for (var i = 0; i < 1000; i++) {
       var grass = models.grass.clone();
-      grass.position.x = Math.floor(Math.random() *(10000+1)-5000);
-      grass.position.z = Math.floor(Math.random() *(10000+1)-5000);
+      grass.position.x = Math.floor(Math.random() * (10000 + 1) - 5000);
+      grass.position.z = Math.floor(Math.random() * (10000 + 1) - 5000);
       scene.add(grass)
     }
 
     function render() {
       var delta = clock.getDelta();
 
-      for(var i = 0; i < recoilPlayers.length; i ++){
-        recoilPlayers[i].obj.position.x -= 500 * recoilPlayers[i].recoilTime * delta * MyPlayer.obj.getWorldDirection().x;
-        recoilPlayers[i].obj.position.z -= 500 * recoilPlayers[i].recoilTime * delta * MyPlayer.obj.getWorldDirection().z;
-        recoilPlayers[i].recoilTime -= delta * 5;
-        recoilPlayers[i].kulaPosition();
-
-        if(recoilPlayers[i].recoilTime < 0){
-          recoilPlayers.splice(i, 1);
-        }
-      }
+      // for (var i = 0; i < recoilPlayers.length; i++) {
+      //   recoilPlayers[i].obj.position.x -= 500 * recoilPlayers[i].recoilTime * delta * MyPlayer.obj.getWorldDirection().x;
+      //   recoilPlayers[i].obj.position.z -= 500 * recoilPlayers[i].recoilTime * delta * MyPlayer.obj.getWorldDirection().z;
+      //   recoilPlayers[i].recoilTime -= delta * 5;
+      //   recoilPlayers[i].kulaPosition();
+      //
+      //   if (recoilPlayers[i].recoilTime < 0) {
+      //     recoilPlayers.splice(i, 1);
+      //   }
+      // }
 
       // -------------- Kamera, tor lotu oraz lot kuli ---------------------------------
 
@@ -122,10 +122,10 @@ function Game() {
         //------- Akcje dla klikniętych klawiszy --------------
 
         if (ui.map[87] && MyPlayer.recoilTime <= 0) { // przód: w
-         var move = {
-           move: "w",
-            Direction_x: (MyPlayer.obj.getWorldDirection().x),
-            Direction_z: (MyPlayer.obj.getWorldDirection().z)
+          var move = {
+            move: "w",
+            Direction_x: (MyPlayer.obj.getWorldDirection().x * delta),
+            Direction_z: (MyPlayer.obj.getWorldDirection().z * delta)
           }
           net.send(move);
           MyPlayer.kolo1.rotation.z += 0.1;
@@ -137,8 +137,8 @@ function Game() {
         if (ui.map[83] && MyPlayer.recoilTime <= 0) { // tył: s
           var move = {
             move: "s",
-            Direction_x: (MyPlayer.obj.getWorldDirection().x),
-            Direction_z: (MyPlayer.obj.getWorldDirection().z)
+            Direction_x: (MyPlayer.obj.getWorldDirection().x * delta),
+            Direction_z: (MyPlayer.obj.getWorldDirection().z * delta)
           }
           net.send(move);
           MyPlayer.kolo1.rotation.z -= 0.1;
@@ -156,14 +156,12 @@ function Game() {
           cameraRotation = Math.max(MyPlayer.obj.rotation.y - Math.PI * 1.25, Math.min(MyPlayer.obj.rotation.y - Math.PI * 0.0, cameraRotation));
         }
         if (ui.map[32]) {
-          if(MyPlayer.kula){
+          if (MyPlayer.kula) {
             var rot = MyPlayer.obj.rotation.y
             var rotL = MyPlayer.lufa.rotation.z
 
             var move = {
               move: "shot",
-              Direction_x: (MyPlayer.obj.getWorldDirection().x),
-              Direction_z: (MyPlayer.obj.getWorldDirection().z),
               rotateOBJ: rot,
               rotateL: rotL
             }
@@ -205,7 +203,7 @@ function Game() {
         );
 
         power = MyPlayer.power;
-        if(angle < 0.95) power = MyPlayer.power * (angle + 0.05);
+        if (angle < 0.95) power = MyPlayer.power * (angle + 0.05);
 
         while (curveVector.y > 0) {
           curvePath.push(curveVector);
@@ -232,7 +230,7 @@ function Game() {
 
 
       //////////////////// Wykonywane na wystrzelonych kulach ///////////////////////////
-      for(var i = 0; i < shotKule.length; i++){
+      for (var i = 0; i < shotKule.length; i++) {
 
         var kula = shotKule[i];
 
@@ -269,7 +267,7 @@ function Game() {
         /////////////// Usinięcie kuli, dodanie nowej, dodanie wybuchu ///////////////////////
 
         if (kula.sphere.position.y < 0) {
-          if(!kula.added){
+          if (!kula.added) {
             kula.owner.kula = new Kula(kula.owner);
             kula.owner.kulaPosition();
             scene.add(kula.owner.kula.sphere);
@@ -312,20 +310,20 @@ function Game() {
   }
   init();
 
-  this.shotKula = function(id){
-    for(var i = 0; i < Players.length; i++){
-      if(Players[i].id == id){
+  this.shotKula = function(id) {
+    for (var i = 0; i < Players.length; i++) {
+      if (Players[i].id == id) {
         power = Players[i].power;
-        if(Players[i].lufa.rotation.z < 0.95) power = Players[i].power * (Players[i].lufa.rotation.z + 0.05);
+        if (Players[i].lufa.rotation.z < 0.95) power = Players[i].power * (Players[i].lufa.rotation.z + 0.05);
         Players[i].kula.power = power;
         Players[i].kula.kulaShotPosition = Players[i].kula.sphere.position.clone();
         Players[i].kula.armataShotPosition = Players[i].lufaCenterVector.clone();
         Players[i].kula.armataShotAngle = Players[i].lufa.rotation.z;
         shotKule.push(Players[i].kula);
         Players[i].kula = null;
-
-        Players[i].recoilTime = 3;
-        recoilPlayers.push(Players[i]);
+        //
+        // Players[i].recoilTime = 3;
+        // recoilPlayers.push(Players[i]);
       }
     }
   }
