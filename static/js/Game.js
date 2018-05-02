@@ -31,7 +31,7 @@ function Game() {
     renderer.gammaInput = true;
     renderer.gammaOutput = true;
 
-    renderer.shadowMap.enabled = true;
+    //renderer.shadowMap.enabled = true;
     //skybox
 
     var imagePrefix = "mats/dawnmountain-";
@@ -57,23 +57,18 @@ function Game() {
     floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
     floorTexture.repeat.set(30, 30);
     var floorMaterial = new THREE.MeshPhongMaterial({
-      shininess: 120,
-      morphTargets: true,
-      vertexColors: THREE.FaceColors,
-      flatShading: true,
+      shininess: 1000,
       map: floorTexture,
       side: THREE.DoubleSide
     });
     var floorGeometry = new THREE.PlaneGeometry(10000, 10000, 10, 10);
     var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-    //floor.position.y = -0.5;
     floor.rotation.x = Math.PI / 2;
     scene.add(floor);
 
     var clock = new THREE.Clock();
     let axes = new THREE.AxesHelper(1000);
     scene.add(axes);
-    //  scene.castShadow = true
     ////////////
 
     //------- Poruszanie kamerą oraz celownikiem --------------
@@ -96,21 +91,6 @@ function Game() {
 
     var isShaking = false;
     var shakingTime = 2;
-
-    //dirLight.castShadow = true;
-
-    //dirLight.shadow.mapSize.width = 2048;
-    //dirLight.shadow.mapSize.height = 2048;
-
-    //  var d = 50;
-
-    //  dirLight.shadow.camera.left = -d;
-    //dirLight.shadow.camera.right = d;
-    //  dirLight.shadow.camera.top = d;
-    //  dirLight.shadow.camera.bottom = -d;
-
-    //  dirLight.shadow.camera.far = 3500;
-    //  dirLight.shadow.bias = -0.0001;
 
     //////////////////////////////////////////////////////////////////
 
