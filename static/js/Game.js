@@ -110,32 +110,11 @@ function Game() {
         recoilPlayers[i].obj.position.z -= 500 * recoilPlayers[i].recoilTime * delta * MyPlayer.obj.getWorldDirection().z;
         recoilPlayers[i].recoilTime -= delta * 5;
         recoilPlayers[i].kulaPosition();
-        
+
         if(recoilPlayers[i].recoilTime < 0){
           recoilPlayers.splice(i, 1);
         }
       }
-<<<<<<< HEAD
-      if (ui.map[32]) {
-        if(MyPlayer.kula){
-          var rot = MyPlayer.obj.rotation.y
-          var rotL = MyPlayer.lufa.rotation.z
-
-          var move = {
-            move: "shot",
-            Direction_x: (MyPlayer.obj.getWorldDirection().x),
-            Direction_z: (MyPlayer.obj.getWorldDirection().z),
-            rotateOBJ: rot,
-            rotateL: rotL
-          }
-          net.send(move);
-
-          isShaking = true;
-          that.shotKula(MyPlayer.id);
-        }
-=======
->>>>>>> 29e0fc9baef22b85025e39aa137e0f596ccc142f
-
 
       // -------------- Kamera, tor lotu oraz lot kuli ---------------------------------
 
@@ -178,6 +157,18 @@ function Game() {
         }
         if (ui.map[32]) {
           if(MyPlayer.kula){
+            var rot = MyPlayer.obj.rotation.y
+            var rotL = MyPlayer.lufa.rotation.z
+
+            var move = {
+              move: "shot",
+              Direction_x: (MyPlayer.obj.getWorldDirection().x),
+              Direction_z: (MyPlayer.obj.getWorldDirection().z),
+              rotateOBJ: rot,
+              rotateL: rotL
+            }
+            net.send(move);
+
             isShaking = true;
             that.shotKula(MyPlayer.id);
           }
