@@ -142,6 +142,18 @@ function Game() {
       }
       if (ui.map[32]) {
         if(MyPlayer.kula){
+          var rot = MyPlayer.obj.rotation.y
+          var rotL = MyPlayer.lufa.rotation.z
+
+          var move = {
+            move: "shot",
+            Direction_x: (MyPlayer.obj.getWorldDirection().x),
+            Direction_z: (MyPlayer.obj.getWorldDirection().z),
+            rotateOBJ: rot,
+            rotateL: rotL
+          }
+          net.send(move);
+
           isShaking = true;
           that.shotKula(MyPlayer.id);
         }
@@ -351,7 +363,7 @@ function Game() {
     for (var i = 0; i < Players.length; i++) {
       if ((Players[i].id) == (data.id)) {
         pl = Players[i];
-        if (data.rotateOBJ) {
+        if (data.move == "rot") {
           pl.rotate = data.rotateOBJ;
           pl.rotateL = data.rotateL;
           pl.rotateF();
@@ -368,6 +380,17 @@ function Game() {
           pl.kolo1.rotation.z -= 0.1;
           pl.kolo2.rotation.z -= 0.1;
           pl.positionF();
+        } else if (data.move == "shot") {
+          pl.x = data.x;
+          pl.z = data.z;
+          pl.positionF();
+
+          pl.rotate = data.rotateOBJ;
+          pl.rotateL = data.rotateL;
+          pl.rotateF();
+          pl.rotateLufaF();
+
+          that.shotKula(pl.id)
         }
       }
     }

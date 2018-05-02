@@ -92,10 +92,11 @@ io.sockets.on("connection", function(client) {
       if ((Players[i].id) == (client.id)) {
         var pl = Players[i];
 
-        if (data.rotateOBJ || data.rotateL) {
+        if (data.move == "rot") {
           pl.rotateArmata = data.rotateOBJ;
           pl.rotateLufa = data.rotateL;
           client.broadcast.emit("movePlayer", {
+            move: "rot",
             rotateOBJ: pl.rotateArmata,
             rotateL: pl.rotateLufa,
             id: client.id
@@ -117,6 +118,19 @@ io.sockets.on("connection", function(client) {
             x: (pl.x),
             z: (pl.z),
             id: client.id
+          });
+        } else if (data.move == "shot") {
+          pl.x -= pl.speed * data.Direction_x;
+          pl.z -= pl.speed * data.Direction_z;
+          pl.rotateArmata = data.rotateOBJ;
+          pl.rotateLufa = data.rotateL;
+          client.broadcast.emit("movePlayer", {
+            move: "shot",
+            id: client.id,
+            x: (pl.x),
+            z: (pl.z),
+            rotateOBJ: pl.rotateArmata,
+            rotateL: pl.rotateLufa
           });
         }
       }

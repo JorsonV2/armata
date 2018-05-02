@@ -35,6 +35,7 @@ var element = document.body;
       var rot = game.returnMyPlayer().obj.rotation.y
       var rotL = game.returnMyPlayer().lufa.rotation.z
       var move = {
+        move: "rot",
         rotateOBJ: rot,
         rotateL: rotL
       }
