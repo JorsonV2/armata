@@ -13,6 +13,7 @@ function Armata(data) {
   this.kula = new Kula(this);
   this.power = 150;
   this.reload = 5;
+  this.recoilTime = 0;
 
   var container = new THREE.Object3D();
 
