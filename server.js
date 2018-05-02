@@ -60,7 +60,7 @@ function file(req, res) {
 server.listen(3000, function() {
   console.log("serwer startuje na porcie 3000")
 });
-// server.listen(3000, '172.20.10.2');
+//server.listen(3000, '192.168.100.104');
 
 function Player(id, name) {
   this.id = id;
