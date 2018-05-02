@@ -20,7 +20,7 @@ function Game() {
     });
 
     renderer = new THREE.WebGLRenderer({
-      antialias: true
+      //antialias: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -324,8 +324,8 @@ function Game() {
         shotKule.push(Players[i].kula);
         Players[i].kula = null;
 
-        Players[i].recoilTime = 3;
-        recoilPlayers.push(Players[i]);
+        //Players[i].recoilTime = 3;
+        //recoilPlayers.push(Players[i]);
       }
     }
   }
