@@ -30,9 +30,13 @@ function Ui() {
       var movementY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
 
       game.returnMyPlayer().obj.rotation.y -= movementX * 0.001; // zmiana rotacji playera
+      if(game.returnMyPlayer().obj.rotation.y > 2 * Math.PI)
+        game.returnMyPlayer().obj.rotation.y = 0;
+      else if(game.returnMyPlayer().obj.rotation.y < 0)
+        game.returnMyPlayer().obj.rotation.y = 2 * Math.PI;
 
       game.returnMyPlayer().lufa.rotation.z -= movementY * 0.001;
-      game.returnMyPlayer().lufa.rotation.z = Math.max(Math.PI * 0, Math.min(Math.PI * 0.5, game.returnMyPlayer().lufa.rotation.z));
+      game.returnMyPlayer().lufa.rotation.z = Math.max(Math.PI * 0, Math.min(Math.PI * 0.40, game.returnMyPlayer().lufa.rotation.z));
 
       rot.push((game.returnMyPlayer().obj.rotation.y));
       rotL.push((game.returnMyPlayer().lufa.rotation.z));
