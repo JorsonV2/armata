@@ -30,10 +30,15 @@ function Ui() {
       var movementY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
 
       game.returnMyPlayer().obj.rotation.y -= movementX * 0.001; // zmiana rotacji playera
-      if(game.returnMyPlayer().obj.rotation.y > 2 * Math.PI)
-        game.returnMyPlayer().obj.rotation.y = 0;
-      else if(game.returnMyPlayer().obj.rotation.y < 0)
-        game.returnMyPlayer().obj.rotation.y = 2 * Math.PI;
+      if(game.returnMyPlayer().obj.rotation.y > 2 * Math.PI){
+        game.returnMyPlayer().obj.rotation.y -= 2 * Math.PI;
+        cameraRotation -= 2 * Math.PI;
+      }
+      else if(game.returnMyPlayer().obj.rotation.y < 0){
+        game.returnMyPlayer().obj.rotation.y += 2 * Math.PI;
+        cameraRotation += 2 * Math.PI;
+      }
+
 
       game.returnMyPlayer().lufa.rotation.z -= movementY * 0.001;
       game.returnMyPlayer().lufa.rotation.z = Math.max(Math.PI * 0, Math.min(Math.PI * 0.40, game.returnMyPlayer().lufa.rotation.z));
@@ -44,6 +49,7 @@ function Ui() {
 
 
       cameraRotation -= movementX * 0.001; // zmiana rotacji kamery
+
       cameraRotation = Math.max(game.returnMyPlayer().obj.rotation.y - Math.PI * 1.25, Math.min(game.returnMyPlayer().obj.rotation.y - Math.PI * 0.0, cameraRotation));
 
     }
