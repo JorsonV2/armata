@@ -324,9 +324,17 @@ function Game() {
         Players[i].kula.armataShotAngle = Players[i].lufa.rotation.z;
         shotKule.push(Players[i].kula);
         Players[i].kula = null;
+<<<<<<< HEAD
 
         //Players[i].recoilTime = 3;
         //recoilPlayers.push(Players[i]);
+=======
+
+
+        // Players[i].recoilTime = 3;
+        // recoilPlayers.push(Players[i]);
+
+>>>>>>> f72a49b0b52c8e10a48e862010e86df573b6d6b0
       }
     }
   }
