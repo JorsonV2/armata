@@ -113,7 +113,6 @@ io.sockets.on("connection", function(client) {
             z: (pl.z)
           };
           move[move.length] = movejson;
-          console.log(pl.rotateArmata);
         } else if (data.move == "s") {
           pl.x -= pl.speed * data.Direction_x;
           pl.z -= pl.speed * data.Direction_z;

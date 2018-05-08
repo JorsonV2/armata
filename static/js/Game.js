@@ -133,7 +133,6 @@ function Game() {
           MyPlayer.obj.position.x += 500 * delta * MyPlayer.obj.getWorldDirection().x;
           MyPlayer.obj.position.z += 500 * delta * MyPlayer.obj.getWorldDirection().z;
           MyPlayer.kulaPosition();
-          console.log(MyPlayer.obj.getWorldDirection().x);
         }
         if (ui.map[83] && MyPlayer.recoilTime <= 0) { // tył: s
           var move = {
@@ -147,8 +146,6 @@ function Game() {
           MyPlayer.obj.position.x -= 500 * delta * MyPlayer.obj.getWorldDirection().x;
           MyPlayer.obj.position.z -= 500 * delta * MyPlayer.obj.getWorldDirection().z;
           MyPlayer.kulaPosition();
-          console.log(MyPlayer.obj.getWorldDirection().x);
-          console.log(MyPlayer.obj.getWorldDirection().z);
         }
         if (ui.map[65]) { // obrót kamery w lewo: a
           cameraRotation -= 0.02;
@@ -324,17 +321,9 @@ function Game() {
         Players[i].kula.armataShotAngle = Players[i].lufa.rotation.z;
         shotKule.push(Players[i].kula);
         Players[i].kula = null;
-<<<<<<< HEAD
 
         //Players[i].recoilTime = 3;
         //recoilPlayers.push(Players[i]);
-=======
-
-
-        // Players[i].recoilTime = 3;
-        // recoilPlayers.push(Players[i]);
-
->>>>>>> f72a49b0b52c8e10a48e862010e86df573b6d6b0
       }
     }
   }
@@ -390,7 +379,6 @@ function Game() {
         if (data.move == "rot") {
           pl.rotate = data.rotateOBJ;
           pl.rotateL = data.rotateL;
-          console.log(pl.rotate);
           pl.rotateF();
           pl.rotateLufaF();
         } else if (data.move == "w") {
