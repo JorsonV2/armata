@@ -3,14 +3,19 @@ body{
     overflow: hidden;
     text-align: center;
 }
-select{
-    border: 1px solid blue;
-    color: blue;
+#root{
+  height: 100vh;
+  width: 100vw;
 }
-
 #pause{
   position: absolute;
   top: 45vh;
   left: 45vw;
   border: 2px solid black;
+}
+#control{
+  position: absolute;
+  border: 2px solid black;
+  width: 100vw;
+  height: 100px;
 }

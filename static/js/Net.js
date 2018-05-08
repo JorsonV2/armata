@@ -1,12 +1,16 @@
 function Net() {
   var client;
 
-  this.connect = function(){
+  this.connect = function() {
     client = io();
-    client.emit("new_user", $('#tb_login').val(), function(data){
-    });
+    client.emit("new_user", $('#tb_login').val(), function(data) {});
 
     client.on("movePlayer", function(data) {
+    //  console.log(data);
+      //  game.movePlayer(data);
+    })
+
+    client.on("movePlayer2", function(data) {
       game.movePlayer(data);
     })
 
@@ -20,11 +24,19 @@ function Net() {
     })
   }
 
-  this.send = function(move) {
+  this.movePlayer = function(move) {
     client.emit("movePlayer", move)
   }
 
-  this.id = function(){
+  this.rotatePlayer = function(move) {
+    client.emit("rotatePlayer", move)
+  }
+
+  this.shotPlayer = function(move) {
+    client.emit("shotPlayer", move)
+  }
+
+  this.id = function() {
     return (client.id);
   }
 

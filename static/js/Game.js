@@ -127,12 +127,13 @@ function Game() {
             Direction_x: (MyPlayer.obj.getWorldDirection().x * delta),
             Direction_z: (MyPlayer.obj.getWorldDirection().z * delta)
           }
-          net.send(move);
+          net.movePlayer(move);
           MyPlayer.kolo1.rotation.z += 0.1;
           MyPlayer.kolo2.rotation.z += 0.1;
           MyPlayer.obj.position.x += 500 * delta * MyPlayer.obj.getWorldDirection().x;
           MyPlayer.obj.position.z += 500 * delta * MyPlayer.obj.getWorldDirection().z;
           MyPlayer.kulaPosition();
+          console.log(MyPlayer.obj.getWorldDirection().x);
         }
         if (ui.map[83] && MyPlayer.recoilTime <= 0) { // tył: s
           var move = {
@@ -140,12 +141,14 @@ function Game() {
             Direction_x: (MyPlayer.obj.getWorldDirection().x * delta),
             Direction_z: (MyPlayer.obj.getWorldDirection().z * delta)
           }
-          net.send(move);
+          net.movePlayer(move);
           MyPlayer.kolo1.rotation.z -= 0.1;
           MyPlayer.kolo2.rotation.z -= 0.1;
           MyPlayer.obj.position.x -= 500 * delta * MyPlayer.obj.getWorldDirection().x;
           MyPlayer.obj.position.z -= 500 * delta * MyPlayer.obj.getWorldDirection().z;
           MyPlayer.kulaPosition();
+          console.log(MyPlayer.obj.getWorldDirection().x);
+          console.log(MyPlayer.obj.getWorldDirection().z);
         }
         if (ui.map[65]) { // obrót kamery w lewo: a
           cameraRotation -= 0.02;
@@ -165,7 +168,7 @@ function Game() {
               rotateOBJ: rot,
               rotateL: rotL
             }
-            net.send(move);
+            net.shotPlayer(move);
 
             isShaking = true;
             that.shotKula(MyPlayer.id);
@@ -321,15 +324,9 @@ function Game() {
         Players[i].kula.armataShotAngle = Players[i].lufa.rotation.z;
         shotKule.push(Players[i].kula);
         Players[i].kula = null;
-<<<<<<< HEAD
-        //
-        // Players[i].recoilTime = 3;
-        // recoilPlayers.push(Players[i]);
-=======
 
         //Players[i].recoilTime = 3;
         //recoilPlayers.push(Players[i]);
->>>>>>> abb40d6a52c5d260b204c5f1b2402ff194fdd6a8
       }
     }
   }
@@ -385,6 +382,7 @@ function Game() {
         if (data.move == "rot") {
           pl.rotate = data.rotateOBJ;
           pl.rotateL = data.rotateL;
+          console.log(pl.rotate);
           pl.rotateF();
           pl.rotateLufaF();
         } else if (data.move == "w") {
