@@ -14,6 +14,10 @@ function Net() {
       game.rotatePlayer(data);
     })
 
+    client.on("d", function(data) {
+      console.log(data);
+    })
+
     client.on("sp", function(data) {
       game.shotPlayer(data);
     })
