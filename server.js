@@ -73,17 +73,16 @@ function Player(id, name) {
 }
 
 var Players = [];
-var move = [];
 
 var io = socketio.listen(server) // server -> server nodejs
 
-setInterval(function() {
-  if (move.length != 0) {
-    console.log("Wysyłam");
-    wys();
-    move = [];
-  }
-}, 100);
+// setInterval(function() {
+//   if (move.length != 0) {
+//   //  console.log("Wysyłam");
+//     wys();
+//     move = [];
+//   }
+// }, 100);
 
 io.sockets.on("connection", function(client) {
   //dodawnie nowego gracza + wysłanie mu listy aktalnych graczy
@@ -98,69 +97,64 @@ io.sockets.on("connection", function(client) {
   });
 
   //obsługa poruszania graczy
-  client.on("movePlayer", function(data) {
-    var movejson;
+  client.on("mp", function(data) {
     for (var i = 0; i < Players.length; i++) {
       if ((Players[i].id) == (client.id)) {
         var pl = Players[i];
-         if (data.move == "w") {
-          pl.x += pl.speed * data.Direction_x;
-          pl.z += pl.speed * data.Direction_z;
-          movejson = {
+        if (data.m == "w") {
+          pl.x += pl.speed * data.x;
+          pl.z += pl.speed * data.z;
+          client.broadcast.emit("mp", {
             id: client.id,
-            move: "w",
+            m: "w",
             x: (pl.x),
             z: (pl.z)
-          };
-          move[move.length] = movejson;
-        } else if (data.move == "s") {
-          pl.x -= pl.speed * data.Direction_x;
-          pl.z -= pl.speed * data.Direction_z;
-          movejson = {
+          });
+
+        } else if (data.m == "s") {
+          pl.x -= pl.speed * data.x;
+          pl.z -= pl.speed * data.z;
+          client.broadcast.emit("mp", {
             id: client.id,
-            move: "s",
+            m: "s",
             x: (pl.x),
             z: (pl.z),
-          };
-          move[move.length] = movejson;
+          });
         }
         break;
       }
     }
   });
-  client.on("rotatePlayer", function(data) {
-    var movejson;
+  client.on("rp", function(data) {
     for (var i = 0; i < Players.length; i++) {
       if ((Players[i].id) == (client.id)) {
         var pl = Players[i];
-        pl.rotateArmata = data.rotateOBJ;
-        pl.rotateLufa = data.rotateL;
-        client.broadcast.emit("movePlayer2", {
-          move: "rot",
-          rotateOBJ: pl.rotateArmata,
-          rotateL: pl.rotateLufa,
-          id: client.id
+        pl.rotateArmata = data.o;
+        pl.rotateLufa = data.l;
+        client.broadcast.emit("rp", {
+          id: client.id,
+          o: pl.rotateArmata,
+          l: pl.rotateLufa
         });
         break;
       }
     }
   });
 
-  client.on("shotPlayer", function(data) {
+  client.on("sp", function(data) {
     for (var i = 0; i < Players.length; i++) {
       if ((Players[i].id) == (client.id)) {
         var pl = Players[i];
         // pl.x -= pl.speed * data.Direction_x;
         // pl.z -= pl.speed * data.Direction_z;
-        pl.rotateArmata = data.rotateOBJ;
-        pl.rotateLufa = data.rotateL;
-        client.broadcast.emit("movePlayer2", {
-          move: "shot",
+        pl.rotateArmata = data.o;
+        pl.rotateLufa = data.l;
+        client.broadcast.emit("sp", {
           id: client.id,
           x: (pl.x),
           z: (pl.z),
-          rotateOBJ: pl.rotateArmata,
-          rotateL: pl.rotateLufa
+          o: pl.rotateArmata,
+          l: pl.rotateLufa
         });
         break;
       }

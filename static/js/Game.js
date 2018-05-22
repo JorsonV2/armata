@@ -8,9 +8,15 @@ function Game() {
   var Nicks = [];
   var allBum = [];
   var shotKule = [];
+  var imove = [];
   var MyPlayer;
   var scene = new THREE.Scene();
   var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
+
+  this.round = function(n, k) {
+    var factor = Math.pow(10, k);
+    return Math.round(n * factor) / factor;
+  }
 
   var init = function() {
     window.addEventListener('resize', function() {
@@ -122,30 +128,39 @@ function Game() {
         //------- Akcje dla klikniętych klawiszy --------------
 
         if (ui.map[87] && MyPlayer.recoilTime <= 0) { // przód: w
-          var move = {
-            move: "w",
-            Direction_x: (MyPlayer.obj.getWorldDirection().x * delta),
-            Direction_z: (MyPlayer.obj.getWorldDirection().z * delta)
-          }
-          net.movePlayer(move);
+
           MyPlayer.kolo1.rotation.z += 0.1;
           MyPlayer.kolo2.rotation.z += 0.1;
           MyPlayer.obj.position.x += 500 * delta * MyPlayer.obj.getWorldDirection().x;
           MyPlayer.obj.position.z += 500 * delta * MyPlayer.obj.getWorldDirection().z;
           MyPlayer.kulaPosition();
+
+          var move = {
+            m: "w",
+            x: (MyPlayer.obj.getWorldDirection().x * delta),
+            z: (MyPlayer.obj.getWorldDirection().z * delta)
+          }
+
+          net.movePlayer(move);
+          //  imove.push(move);
         }
         if (ui.map[83] && MyPlayer.recoilTime <= 0) { // tył: s
-          var move = {
-            move: "s",
-            Direction_x: (MyPlayer.obj.getWorldDirection().x * delta),
-            Direction_z: (MyPlayer.obj.getWorldDirection().z * delta)
-          }
-          net.movePlayer(move);
+
           MyPlayer.kolo1.rotation.z -= 0.1;
           MyPlayer.kolo2.rotation.z -= 0.1;
           MyPlayer.obj.position.x -= 500 * delta * MyPlayer.obj.getWorldDirection().x;
           MyPlayer.obj.position.z -= 500 * delta * MyPlayer.obj.getWorldDirection().z;
           MyPlayer.kulaPosition();
+
+          var move = {
+            m: "s",
+            x: (MyPlayer.obj.getWorldDirection().x * delta),
+            z: (MyPlayer.obj.getWorldDirection().z * delta)
+          }
+
+          net.movePlayer(move);
+          //imove.push(move);
+
         }
         if (ui.map[65]) { // obrót kamery w lewo: a
           cameraRotation -= 0.02;
@@ -159,11 +174,9 @@ function Game() {
           if (MyPlayer.kula) {
             var rot = MyPlayer.obj.rotation.y
             var rotL = MyPlayer.lufa.rotation.z
-
             var move = {
-              move: "shot",
-              rotateOBJ: rot,
-              rotateL: rotL
+              o: rot,
+              l: rotL
             }
             net.shotPlayer(move);
 
@@ -310,6 +323,14 @@ function Game() {
   }
   init();
 
+  //kontrola wysyłania poruszania się na serwer
+  setInterval(function() {
+    if ((imove.length != 0)) {
+      net.movePlayer(imove[imove.length - 1]);
+      imove = [];
+    }
+  }, 100);
+
   this.shotKula = function(id) {
     for (var i = 0; i < Players.length; i++) {
       if (Players[i].id == id) {
@@ -321,7 +342,7 @@ function Game() {
         Players[i].kula.armataShotAngle = Players[i].lufa.rotation.z;
         shotKule.push(Players[i].kula);
         Players[i].kula = null;
-
+        break;
         //Players[i].recoilTime = 3;
         //recoilPlayers.push(Players[i]);
       }
@@ -337,6 +358,7 @@ function Game() {
         scene.remove(Players[i].obj)
         scene.remove(Players[i].kula.sphere);
         Players.splice(i, 1);
+        break;
       }
     }
     MyPlayerUpdate();
@@ -372,39 +394,101 @@ function Game() {
     MyPlayerUpdate();
   }
 
+  this.shotPlayer = function(data) {
+    for (var i = 0; i < Players.length; i++) {
+      if ((Players[i].id) == (data.id)) {
+        pl = Players[i];
+        pl.x = data.x;
+        pl.z = data.z;
+        pl.positionF();
+
+        pl.rotate = data.o;
+        pl.rotateL = data.l;
+        pl.rotateF();
+        pl.rotateLufaF();
+        that.shotKula(pl.id)
+        break;
+      }
+    }
+  }
+
+  this.rotatePlayer = function(data) {
+    for (var i = 0; i < Players.length; i++) {
+      if ((Players[i].id) == (data.id)) {
+        pl = Players[i];
+
+        // var difference = (pl.rotate - data.o) / 2;
+        // var x = 0;
+
+        // if (pl.rotate > 3 * Math.PI / 2 && pl.rotate < 2 * Math.PI) {
+        //   if (data.o > 0 && data.o < Math.PI / 2){
+        //     console.log("przeskok1");
+        //
+        //   }
+        // }
+
+        // if (Math.sign(difference) == -1) {
+        //   const diff = setInterval(function() {
+        //     console.log(x + ":" + pl.rotate + " , " + data.o);
+        //     if (pl.rotate > (2 * Math.PI)) {
+        //       pl.rotate -= (2 * Math.PI);
+        //     }
+        //     if ((pl.rotate) >= (data.o)) {
+        //       pl.rotate = data.o;
+        //       pl.rotateF();
+        //       console.log("koniec 1: " + pl.rotate + " , " + data.o);
+        //       clearInterval(diff);
+        //     }
+        //     pl.rotate -= -0.01 //difference;
+        //     pl.rotateF();
+        //
+        //     x++;
+        //   }, 1000 / 60);
+        //
+        // } else {
+        //   const diff = setInterval(function() {
+        //     console.log(x + ":" + pl.rotate + " , " + data.o);
+        //     if (pl.rotate < 0) {
+        //       pl.rotate += 2 * Math.PI;
+        //     }
+        //     if ((pl.rotate) <= (data.o)) {
+        //       pl.rotate = data.o;
+        //       pl.rotateF();
+        //       console.log("koniec 2: " + pl.rotate + " , " + data.o);
+        //       clearInterval(diff);
+        //     }
+        //     pl.rotate -= 0.01 //difference;
+        //     pl.rotateF();
+        //     x++;
+        //   }, 1000 / 60);
+        // }
+        pl.rotate = data.o;
+        pl.rotateL = data.l;
+        pl.rotateF();
+        pl.rotateLufaF();
+        break;
+      }
+    }
+  }
+
   this.movePlayer = function(data) {
     for (var i = 0; i < Players.length; i++) {
       if ((Players[i].id) == (data.id)) {
         pl = Players[i];
-        if (data.move == "rot") {
-          pl.rotate = data.rotateOBJ;
-          pl.rotateL = data.rotateL;
-          pl.rotateF();
-          pl.rotateLufaF();
-        } else if (data.move == "w") {
+        if (data.m == "w") {
           pl.x = data.x;
           pl.z = data.z;
           pl.kolo1.rotation.z += 0.1;
           pl.kolo2.rotation.z += 0.1;
           pl.positionF();
-        } else if (data.move == "s") {
+        } else if (data.m == "s") {
           pl.x = data.x;
           pl.z = data.z;
           pl.kolo1.rotation.z -= 0.1;
           pl.kolo2.rotation.z -= 0.1;
           pl.positionF();
-        } else if (data.move == "shot") {
-          pl.x = data.x;
-          pl.z = data.z;
-          pl.positionF();
-
-          pl.rotate = data.rotateOBJ;
-          pl.rotateL = data.rotateL;
-          pl.rotateF();
-          pl.rotateLufaF();
-
-          that.shotKula(pl.id)
         }
+        break;
       }
     }
   }
