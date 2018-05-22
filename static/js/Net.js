@@ -15,7 +15,7 @@ function Net() {
     })
 
     client.on("d", function(data) {
-      console.log(data);
+      ui.decreaseHpPoints(25);
     })
 
     client.on("sp", function(data) {
@@ -34,6 +34,10 @@ function Net() {
 
   this.movePlayer = function(move) {
     client.emit("mp", move)
+  }
+
+  this.bum = function(bum) {
+    client.emit("b", bum)
   }
 
   this.rotatePlayer = function(move) {

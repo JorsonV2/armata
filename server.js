@@ -141,20 +141,23 @@ io.sockets.on("connection", function(client) {
     }
   });
 
-  client.on("sp", function(data) {
+  client.on("b", function(data) {
     for (var i = 0; i < Players.length; i++) {
-      if ((Players[i].id) == (client.id)) {
-        var pl = Players[i];
-        for (var i = 0; i < Players.length; i++) {
           var r = 750;
           var d = Math.sqrt(Math.pow((Players[i].x - data.x), 2) + Math.pow((Players[i].z - data.z), 2));
           if (d < r) {
             console.log(d);
               io.sockets.to(Players[i].id).emit("d", {
-                status: "test"
+                status: "bum"
               });
           }
-        }
+    }
+  });
+
+  client.on("sp", function(data) {
+    for (var i = 0; i < Players.length; i++) {
+      if ((Players[i].id) == (client.id)) {
+        var pl = Players[i];
         // pl.x -= pl.speed * data.Direction_x;
         // pl.z -= pl.speed * data.Direction_z;
         pl.rotateArmata = data.o;
