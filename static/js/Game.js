@@ -176,7 +176,7 @@ function Game() {
             var rotL = MyPlayer.lufa.rotation.z
             var move = {
               o: rot,
-              l: rotL
+              l: rotL,
             }
             net.shotPlayer(move);
 
