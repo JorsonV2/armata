@@ -154,9 +154,8 @@ function Ui() {
   setInterval(function() {
     if ((rot.length != 0) || (rotL.length != 0)) {
       var move = {
-        move: "rot",
-        rotateOBJ: (rot[rot.length - 1]),
-        rotateL: (rotL[rotL.length - 1])
+        o: (game.round((rot[rot.length - 1]),  3) ),
+        l: (game.round((rotL[rotL.length - 1]),  3) )
       }
       net.rotatePlayer(move);
       rot = [];
