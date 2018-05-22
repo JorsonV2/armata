@@ -24,18 +24,7 @@ function Ui() {
   ranking = $('<div id="ranking">');
 
   function updateHpLine(){
-<<<<<<< HEAD
-    hpLine.css("width", hpPoints + "%");
-    hp.text(hpPoints);
-    hp.append(hpLine)
-    // if(hpPoints <= 0){
-    //   net.connect();
-    //   that.changeHpPoints(100);
-    //   new_game();
-    // }
-=======
     hp.attr("value", hpPoints);
->>>>>>> 74e6d15e42d833f62a42367af18134fad5a06d5f
   }
 
   this.changeHpPoints = function(HealthPoints){
