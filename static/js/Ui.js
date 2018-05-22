@@ -32,6 +32,11 @@ function Ui() {
     hpLine.css("width", hpPoints + "%");
     hp.text(hpPoints);
     hp.append(hpLine)
+    // if(hpPoints <= 0){
+    //   net.connect();
+    //   that.changeHpPoints(100);
+    //   new_game();
+    // }
   }
 
   this.changeHpPoints = function(HealthPoints){
@@ -41,6 +46,7 @@ function Ui() {
 
   this.decreaseHpPoints = function(HealthPoints){
     hpPoints -= HealthPoints;
+
     updateHpLine();
   }
 

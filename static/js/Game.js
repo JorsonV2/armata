@@ -11,6 +11,7 @@ function Game() {
   var imove = [];
   var MyPlayer;
   var scene = new THREE.Scene();
+  //scene.fog = new THREE.FogExp2( 0xefd1b5, 0.00025 );
   var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
 
   this.round = function(n, k) {
@@ -62,13 +63,13 @@ function Game() {
 
     var floorTexture = new THREE.ImageUtils.loadTexture('mats/grass3.jpg');
     floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-    floorTexture.repeat.set(30, 30);
+    floorTexture.repeat.set(300, 300);
     var floorMaterial = new THREE.MeshPhongMaterial({
       shininess: 1000,
       map: floorTexture,
       side: THREE.DoubleSide
     });
-    var floorGeometry = new THREE.PlaneGeometry(10000, 10000, 10, 10);
+    var floorGeometry = new THREE.PlaneGeometry(100000, 100000, 10, 10);
     var floor = new THREE.Mesh(floorGeometry, floorMaterial);
     floor.rotation.x = Math.PI / 2;
     scene.add(floor);
