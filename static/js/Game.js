@@ -164,11 +164,11 @@ function Game() {
         }
         if (ui.map[65]) { // obrót kamery w lewo: a
           cameraRotation -= 0.02;
-          cameraRotation = Math.max(MyPlayer.obj.rotation.y - Math.PI * 1.25, Math.min(MyPlayer.obj.rotation.y - Math.PI * 0.0, cameraRotation));
+          cameraRotation = Math.max(MyPlayer.obj.rotation.y - Math.PI * 1.25, Math.min(MyPlayer.obj.rotation.y - Math.PI * 0.75, cameraRotation));
         }
         if (ui.map[68]) { // obrót kamery w prawo: d
           cameraRotation += 0.02;
-          cameraRotation = Math.max(MyPlayer.obj.rotation.y - Math.PI * 1.25, Math.min(MyPlayer.obj.rotation.y - Math.PI * 0.0, cameraRotation));
+          cameraRotation = Math.max(MyPlayer.obj.rotation.y - Math.PI * 1.25, Math.min(MyPlayer.obj.rotation.y - Math.PI * 0.75, cameraRotation));
         }
         if (ui.map[32]) {
           if (MyPlayer.kula) {
@@ -383,7 +383,11 @@ function Game() {
       for (var i = 0; i < data.length; i++) {
         Players[i] = new Armata(data[i]);
         scene.add((Players[i].obj));
-        scene.add(Players[i].kula.sphere)
+        scene.add(Players[i].kula.sphere);
+        Players[i].skillPower = data[i].skillPower;
+        Players[i].skillSpeed = data[i].skillSpeed;
+        Players[i].skillReload = data[i].skillReload;
+        Players[i].skillPoints = data[i].skillPoints;
         Players[i].positionF();
         Players[i].rotateF();
         Players[i].rotateLufaF();
@@ -397,6 +401,10 @@ function Game() {
             Players[i] = new Armata(data[i]);
             scene.add((Players[i].obj));
             scene.add(Players[i].kula.sphere)
+            Players[i].skillPower = data[i].skillPower;
+            Players[i].skillSpeed = data[i].skillSpeed;
+            Players[i].skillReload = data[i].skillReload;
+            Players[i].skillPoints = data[i].skillPoints;
             Players[i].positionF();
             Players[i].rotateF();
             Players[i].rotateLufaF();

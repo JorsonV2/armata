@@ -20,18 +20,11 @@ function Ui() {
   //////////////////// Przypisanie do wartości odpowiednich elementów UI /////////////////////////
 
   skill = $('<div id="skill">');
-  hp = $('<div id="hp">');
+  hp = $('<progress id="hp" value="100" max="100">');
   ranking = $('<div id="ranking">');
 
-  hpLine = $('<div id="hpLine">');
-  hpLine.css("width", hpPoints + "%");
-  hp.text(hpPoints);
-  hp.append(hpLine)
-
   function updateHpLine(){
-    hpLine.css("width", hpPoints + "%");
-    hp.text(hpPoints);
-    hp.append(hpLine)
+    hp.attr("value", hpPoints);
   }
 
   this.changeHpPoints = function(HealthPoints){
@@ -126,7 +119,7 @@ function Ui() {
 
       cameraRotation -= movementX * 0.001; // zmiana rotacji kamery
 
-      cameraRotation = Math.max(game.returnMyPlayer().obj.rotation.y - Math.PI * 1.25, Math.min(game.returnMyPlayer().obj.rotation.y - Math.PI * 0.0, cameraRotation));
+      cameraRotation = Math.max(game.returnMyPlayer().obj.rotation.y - Math.PI * 1.25, Math.min(game.returnMyPlayer().obj.rotation.y - Math.PI * 0.75, cameraRotation));
 
     }
   }
