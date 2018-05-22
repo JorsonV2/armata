@@ -177,8 +177,6 @@ function Game() {
             var move = {
               o: rot,
               l: rotL,
-              x: target.target.position.x,
-              z: target.target.position.z
             }
             net.shotPlayer(move);
 
