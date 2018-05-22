@@ -7,6 +7,7 @@ function Kula(owner){
     this.shotTime = 0;
     this.added = false;
     this.path = [];
+    this.bumPosition;
 
     var geometry = new THREE.SphereGeometry( 20, 20, 20 );
     var material = new THREE.MeshPhongMaterial({

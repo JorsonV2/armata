@@ -79,7 +79,7 @@ function Game() {
     ////////////
 
     //------- Poruszanie kamerą oraz celownikiem --------------
-    var target = new Target();
+    target = new Target();
     var flightLine = new FlightLine();
     scene.add(target.target);
     scene.add(flightLine.flightLine);
@@ -279,8 +279,20 @@ function Game() {
 
         /////////////// Usinięcie kuli, dodanie nowej, dodanie wybuchu ///////////////////////
 
+
         if (kula.sphere.position.y < 0) {
+
+          if(kula.owner.id == MyPlayer.id){
+            console.log(kula.bumPosition);
+            var bum = {
+              x: kula.bumPosition.x,
+              z: kula.bumPosition.z
+            }
+            net.bum(bum);
+          }
+
           if (!kula.added) {
+
             kula.owner.kula = new Kula(kula.owner);
             kula.owner.kulaPosition();
             scene.add(kula.owner.kula.sphere);
@@ -336,6 +348,8 @@ function Game() {
       if (Players[i].id == id) {
         power = Players[i].power;
         if (Players[i].lufa.rotation.z < 0.95) power = Players[i].power * (Players[i].lufa.rotation.z + 0.05);
+        console.log(target);
+        Players[i].kula.bumPosition = target.target.position.clone();
         Players[i].kula.power = power;
         Players[i].kula.kulaShotPosition = Players[i].kula.sphere.position.clone();
         Players[i].kula.armataShotPosition = Players[i].lufaCenterVector.clone();
