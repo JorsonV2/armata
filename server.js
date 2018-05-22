@@ -70,6 +70,10 @@ function Player(id, name) {
   this.speed = 500;
   this.rotateArmata = 0;
   this.rotateLufa = Math.PI * 0.3;
+  this.skillSpeed = 0;
+  this.skillPower = 0;
+  this.skillReload = 0;
+  this.skillPoints = 0;
 }
 
 var Players = [];

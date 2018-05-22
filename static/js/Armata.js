@@ -14,6 +14,10 @@ function Armata(data) {
   this.power = 150;
   this.reload = 5;
   this.recoilTime = 0;
+  this.skillPower;
+  this.skillSpeed;
+  this.skillReload;
+  this.skillPoints;
 
   var container = new THREE.Object3D();
 
