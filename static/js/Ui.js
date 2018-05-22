@@ -1,11 +1,87 @@
 function Ui() {
+  var that = this;
   var rot = [];
   var rotL = [];
   var element = document.body;
+  var skill;
+  var skillReload;
+  var skillPower;
+  var skillSpeed;
+  var skillPoints = 0;
+  var hp;
+  var hpLine;
+  var hpPoints = 100;
+  var ranking;
+
+  this.reload = 0;
+  this.power = 0;
+  this.speed = 0;
+
+  //////////////////// Przypisanie do wartości odpowiednich elementów UI /////////////////////////
+
+  skill = $('<div id="skill">');
+  hp = $('<div id="hp">');
+  ranking = $('<div id="ranking">');
+
+  hpLine = $('<div id="hpLine">');
+  hpLine.css("width", hpPoints + "%");
+  hp.text(hpPoints);
+  hp.append(hpLine)
+
+  function updateHpLine(){
+    hpLine.css("width", hpPoints + "%");
+    hp.text(hpPoints);
+    hp.append(hpLine)
+  }
+
+  this.changeHpPoints = function(HealthPoints){
+    hpPoints = HealthPoints;
+    updateHpLine();
+  }
+
+  this.decreaseHpPoints = function(HealthPoints){
+    hpPoints -= HealthPoints;
+    updateHpLine();
+  }
+
+  skill.append($('<span id="skillPoints">Skill Points: 0</span>'));
+  skill.append($("<br>"))
+
+  skillReload = $('<span>');
+  skillReload.text("reload: " + that.reload + " ");
+  skillReload.append($('<button id="skillReload">+</button>'));
+
+  skillPower = $('<span>');
+  skillPower.text("power: " + that.power + " ");
+  skillPower.append($('<button id="skillPower">+</button>'));
+
+  skillSpeed = $('<span>');
+  skillSpeed.text("speed: " + that.speed + " ");
+  skillSpeed.append($('<button id="skillSpeed">+</button>'));
+
+  skill.append(skillReload);
+  skill.append($("<br>"))
+  skill.append(skillPower);
+  skill.append($("<br>"))
+  skill.append(skillSpeed);
+
+  $(window).resize(function(){
+    hp.css("left", ($(window).width() / 2) - (hp.width() / 2));
+  })
+
+  $("#control").append(skill);
+  $("#control").append(hp);
+  $("#control").append(ranking);
+
+  hp.css("left", ($(window).width() / 2) - (hp.width() / 2));
+
   //------- Start gry --------------
   $("#btn_Go").on("click", function() {
     net.connect();
+    that.changeHpPoints(100);
     new_game();
+
+    $("#control").css("display", "block");
 
     //obsługa myszki
     element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
