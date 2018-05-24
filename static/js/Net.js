@@ -26,6 +26,14 @@ function Net() {
       game.shotPlayer(data);
     })
 
+    client.on("sk", function(data) {
+      ui.allocateSkillPoint(date);
+    })
+
+    client.on("asp", function(){
+      ui.addSkillPoint();
+    })
+
     client.on("remove", function(data) {
       console.log("Gracz " + data + " opuscił gre :(");
       game.removePlayer(data);
@@ -42,6 +50,10 @@ function Net() {
 
   this.bum = function(bum) {
     client.emit("b", bum)
+  }
+
+  this.skill = function(skill) {
+    client.emit("sk", skill)
   }
 
   this.rotatePlayer = function(move) {
