@@ -114,6 +114,7 @@ function Game() {
 
 
       // -------------- Kamera, tor lotu oraz lot kuli ---------------------------------
+      //siema
 
       if (MyPlayer) {
 
@@ -122,7 +123,7 @@ function Game() {
           MyPlayer.obj.position.z -= MyPlayer.speed * MyPlayer.recoilTime * delta * MyPlayer.obj.getWorldDirection().z;
           MyPlayer.recoilTime -= delta * 5;
           MyPlayer.kulaPosition();
-          
+
           var move = {
             m: "r",
             x: (MyPlayer.obj.getWorldDirection().x * delta * MyPlayer.recoilTime),
