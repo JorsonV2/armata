@@ -1,6 +1,4 @@
 function Armata(data) {
-  this.id = data.id;
-  this.name = data.name;
   this.lufa;
   this.lufaCenterVector;
   this.kolo1;
@@ -11,14 +9,25 @@ function Armata(data) {
   this.rotateL = data.rotateLufa;
   this.sprite = new makeTextSprite(this.name);
   this.kula = new Kula(this);
+  //--------------------------------------------------
+  this.id = data.id;
+  this.name = data.name;
+
+  this.hp = 100;
   this.power = 150;
+<<<<<<< HEAD
   this.speed;
+=======
+  this.speed = 500;
+>>>>>>> 9a70a5a477aeecbdd67e167bb07cd1a43739c6f0
   this.reload = 5;
   this.recoilTime = 0;
+
   this.skillPower;
   this.skillSpeed;
   this.skillReload;
   this.skillPoints;
+
 
   var container = new THREE.Object3D();
 
@@ -43,8 +52,6 @@ function Armata(data) {
   this.kolo2 = kolo2;
 
   this.sprite.position.y = 200;
-  //this.sprite.position.x = -30
-
 
   container.add(kolo1)
   container.add(kolo2)

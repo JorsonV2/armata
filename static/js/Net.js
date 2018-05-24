@@ -15,7 +15,11 @@ function Net() {
     })
 
     client.on("d", function(data) {
-      ui.decreaseHpPoints(25);
+      if (data.d == "dead") {
+        console.log("umarłeś");
+      } else {
+        ui.changeHpPoints(data.d);
+      }
     })
 
     client.on("sp", function(data) {

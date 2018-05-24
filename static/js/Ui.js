@@ -3,6 +3,7 @@ function Ui() {
   var rot = [];
   var rotL = [];
   var element = document.body;
+<<<<<<< HEAD
   var skill;
   var skillReload;
   var skillPower;
@@ -90,11 +91,12 @@ function Ui() {
   $("#control").append(ranking);
 
   hp.css("left", ($(window).width() / 2) - (hp.width() / 2));
+=======
+>>>>>>> 9a70a5a477aeecbdd67e167bb07cd1a43739c6f0
 
   //------- Start gry --------------
   $("#btn_Go").on("click", function() {
     net.connect();
-    that.changeHpPoints(100);
     new_game();
 
     $("#control").css("display", "block");
@@ -159,13 +161,13 @@ function Ui() {
         $('#pause').remove();
       });
     }
-
   };
 
   document.addEventListener('pointerlockchange', pointerlockchange, false);
   document.addEventListener('mozpointerlockchange', pointerlockchange, false);
   document.addEventListener('webkitpointerlockchange', pointerlockchange, false);
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   //kontrola wysyłanie rotacji na serwer
   setInterval(function() {
     if ((rot.length != 0) || (rotL.length != 0)) {
@@ -178,4 +180,11 @@ function Ui() {
       rotL = [];
     }
   }, 100);
+
+  //////////////////// Controls /////////////////////////
+  this.changeHpPoints = function(data){
+    game.returnMyPlayer().hp = data;
+    $("#hp_bar").val(data);
+  }
+
 };
