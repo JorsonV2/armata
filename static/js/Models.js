@@ -21,7 +21,7 @@ function Models() {
           flatShading: true
         });
       } else if (url == "mats/kolo.json") {
-        geometry.translate((0), (-3), 0)
+        geometry.translate((0), (-2.8), 0)
         var material = new THREE.MeshPhongMaterial({
           color: 0x0a1105,
           specular: 0x091600,

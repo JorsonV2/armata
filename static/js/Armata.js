@@ -12,6 +12,7 @@ function Armata(data) {
   this.sprite = new makeTextSprite(this.name);
   this.kula = new Kula(this);
   this.power = 150;
+  this.speed;
   this.reload = 5;
   this.recoilTime = 0;
   this.skillPower;

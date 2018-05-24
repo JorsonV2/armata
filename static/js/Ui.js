@@ -27,6 +27,10 @@ function Ui() {
     hp.attr("value", hpPoints);
   }
 
+  function updateSkillPoints(){
+
+  }
+
   this.changeHpPoints = function(HealthPoints){
     hpPoints = HealthPoints;
     updateHpLine();
@@ -37,20 +41,24 @@ function Ui() {
     updateHpLine();
   }
 
+  this.allocateSkillPoint = function(skillPoint){
+
+  }
+
   skill.append($('<span id="skillPoints">Skill Points: 0</span>'));
   skill.append($("<br>"))
 
   skillReload = $('<span>');
   skillReload.text("reload: " + that.reload + " ");
-  skillReload.append($('<button id="skillReload">+</button>'));
+  skillReload.append($('<button class="skill" id="skillReload">+</button>'));
 
   skillPower = $('<span>');
   skillPower.text("power: " + that.power + " ");
-  skillPower.append($('<button id="skillPower">+</button>'));
+  skillPower.append($('<button class="skill" id="skillPower">+</button>'));
 
   skillSpeed = $('<span>');
   skillSpeed.text("speed: " + that.speed + " ");
-  skillSpeed.append($('<button id="skillSpeed">+</button>'));
+  skillSpeed.append($('<button class="skill" id="skillSpeed">+</button>'));
 
   skill.append(skillReload);
   skill.append($("<br>"))
@@ -58,8 +66,23 @@ function Ui() {
   skill.append($("<br>"))
   skill.append(skillSpeed);
 
-  $(window).resize(function(){
-    hp.css("left", ($(window).width() / 2) - (hp.width() / 2));
+  skillPower.on("click", function(){
+    var skill = {
+      skill: "power"
+    }
+    net.skill(skill);
+  })
+  skillReload.on("click", function(){
+    var skill = {
+      skill: "reload"
+    }
+    net.skill(skill);
+  })
+  skillSpeed.on("click", function(){
+    var skill = {
+      skill: "speed"
+    }
+    net.skill(skill);
   })
 
   $("#control").append(skill);
@@ -92,7 +115,7 @@ function Ui() {
 
   //////////////////////// obsługa myszki////////////////////////////////////////////////////////////////////////////////////////
   var UsePointerLock = function(event) {
-    if (game.returnMyPlayer()) {
+    if (game.returnMyPlayer() && game.returnMyPlayer().recoilTime <= 0) {
       var e = event.originalEvent;
 
       var movementX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
