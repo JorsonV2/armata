@@ -47,25 +47,47 @@ body{
 }
 
 #bar{
-
+display: flex;
+flex-direction: column;
+align-items: center;
 }
 
 #hp_bar{
+  /* Reset the default appearance */
+  -webkit-appearance: none;
+   appearance: none;
+
   width: 40vw;
   height: 4vh;
-  z-index: 2;
 
-  border: 1px black solid;
-  border-radius: 4px;
+  border: 2px black solid;
+  border-radius: 2px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
 }
 
+#hp_bar::-webkit-progress-value {
+  background-color: red;
+
+    border-radius: 2px;
+    background-size: 35px 20px, 100% 100%, 100% 100%;
+}
+
 #reload_bar{
+  /* Reset the default appearance */
+  -webkit-appearance: none;
+   appearance: none;
+
   width: 40vw;
-  height: 4vh;
-  z-index: 2;
+  height: 2vh;
 
   border: 1px black solid;
-  border-radius: 4px;
+  border-radius: 2px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+
+#reload_bar::-webkit-progress-value {
+  background-color: green;
+
+    border-radius: 2px;
+    background-size: 35px 20px, 100% 100%, 100% 100%;
 }
