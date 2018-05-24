@@ -34,11 +34,10 @@ function Ui() {
       var movementY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
 
       game.returnMyPlayer().obj.rotation.y -= movementX * 0.001; // zmiana rotacji playera
-      if(game.returnMyPlayer().obj.rotation.y > 2 * Math.PI){
+      if (game.returnMyPlayer().obj.rotation.y > 2 * Math.PI) {
         game.returnMyPlayer().obj.rotation.y -= 2 * Math.PI;
         cameraRotation -= 2 * Math.PI;
-      }
-      else if(game.returnMyPlayer().obj.rotation.y < 0){
+      } else if (game.returnMyPlayer().obj.rotation.y < 0) {
         game.returnMyPlayer().obj.rotation.y += 2 * Math.PI;
         cameraRotation += 2 * Math.PI;
       }
@@ -82,8 +81,8 @@ function Ui() {
   setInterval(function() {
     if ((rot.length != 0) || (rotL.length != 0)) {
       var move = {
-        o: (game.round((rot[rot.length - 1]),  3) ),
-        l: (game.round((rotL[rotL.length - 1]),  3) )
+        o: (game.round((rot[rot.length - 1]), 3)),
+        l: (game.round((rotL[rotL.length - 1]), 3))
       }
       net.rotatePlayer(move);
       rot = [];
@@ -92,9 +91,11 @@ function Ui() {
   }, 100);
 
   //////////////////// Controls /////////////////////////
-  this.changeHpPoints = function(data){
+  this.changeHpPoints = function(data) {
     game.returnMyPlayer().hp = data;
     $("#hp_bar").val(data);
   }
-
+  this.changeReload = function(data) {
+    $("#reload_bar").val(data);
+  }
 };
