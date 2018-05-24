@@ -109,8 +109,8 @@ io.sockets.on("connection", function(client) {
       if ((Players[i].id) == (client.id)) {
         var pl = Players[i];
         if (data.m == "w") {
-          pl.x += pl.speed * data.x;
-          pl.z += pl.speed * data.z;
+          pl.x += (pl.speed + (20 * pl.skillSpeed)) * data.x;
+          pl.z += (pl.speed + (20 * pl.skillSpeed)) * data.z;
           client.broadcast.emit("mp", {
             id: client.id,
             m: "w",
@@ -119,11 +119,20 @@ io.sockets.on("connection", function(client) {
           });
 
         } else if (data.m == "s") {
-          pl.x -= pl.speed * data.x;
-          pl.z -= pl.speed * data.z;
+          pl.x -= (pl.speed + (20 * pl.skillSpeed)) * data.x;
+          pl.z -= (pl.speed + (20 * pl.skillSpeed)) * data.z;
           client.broadcast.emit("mp", {
             id: client.id,
             m: "s",
+            x: (pl.x),
+            z: (pl.z),
+          });
+        } else if (data.m == "r") {
+          pl.x -= pl.speed * data.x;
+          pl.z -= pl.speed * data.z;
+          io.sockets.emit("mp", {
+            id: client.id,
+            m: "r",
             x: (pl.x),
             z: (pl.z),
           });
@@ -166,6 +175,11 @@ io.sockets.on("connection", function(client) {
               io.sockets.to(Players[i].id).emit("d", {
                 d: x
               });
+              io.sockets.emit("o", {
+                id: Players[i].id,
+                x: Players[i].x - data.x,
+                z: Players[i].z - data.z
+              })
           }
     }
   });
@@ -185,6 +199,49 @@ io.sockets.on("connection", function(client) {
           o: pl.rotateArmata,
           l: pl.rotateLufa
         });
+        break;
+      }
+    }
+  })
+
+  client.on("sk", function(dane) {
+    for (var i = 0; i < Players.length; i++) {
+      if ((Players[i].id) == (client.id)) {
+        var pl = Players[i];
+        if(pl.skillPoints < pl.skillPower + pl.skillSpeed + pl.skillReload){
+          pl.skillPower = 0;
+          pl.skillSpeed = 0;
+          pl.skillReload = 0;
+          io.sockets.emit("sk", {
+            id: client.id,
+            skill: "noob"
+          })
+        }
+        else {
+          switch(dane.skill){
+            case "power":
+              pl.skillPower ++;
+              io.sockets.emit("sk", {
+                id: client.id,
+                skill: "power"
+              })
+              break;
+            case "speed":
+              pl.skillSpeed ++;
+              io.sockets.emit("sk", {
+                id: client.id,
+                skill: "speed"
+              })
+             break;
+            case "reload":
+             pl.skillReload ++;
+              io.sockets.emit("sk", {
+                id: client.id,
+                skill: "reload"
+              })
+              break;
+          }
+        }
         break;
       }
     }

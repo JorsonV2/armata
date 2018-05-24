@@ -27,7 +27,7 @@ function Ui() {
 
   //////////////////////// obsługa myszki////////////////////////////////////////////////////////////////////////////////////////
   var UsePointerLock = function(event) {
-    if (game.returnMyPlayer()) {
+    if (game.returnMyPlayer() && game.returnMyPlayer().recoilTime <= 0) {
       var e = event.originalEvent;
 
       var movementX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;

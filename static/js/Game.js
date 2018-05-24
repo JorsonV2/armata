@@ -111,28 +111,37 @@ function Game() {
     function render() {
       var delta = clock.getDelta();
 
-      // for (var i = 0; i < recoilPlayers.length; i++) {
-      //   recoilPlayers[i].obj.position.x -= 500 * recoilPlayers[i].recoilTime * delta * MyPlayer.obj.getWorldDirection().x;
-      //   recoilPlayers[i].obj.position.z -= 500 * recoilPlayers[i].recoilTime * delta * MyPlayer.obj.getWorldDirection().z;
-      //   recoilPlayers[i].recoilTime -= delta * 5;
-      //   recoilPlayers[i].kulaPosition();
-      //
-      //   if (recoilPlayers[i].recoilTime < 0) {
-      //     recoilPlayers.splice(i, 1);
-      //   }
-      // }
+
 
       // -------------- Kamera, tor lotu oraz lot kuli ---------------------------------
 
       if (MyPlayer) {
+
+        if(MyPlayer.recoilTime > 0){
+          MyPlayer.obj.position.x -= MyPlayer.speed * MyPlayer.recoilTime * delta * MyPlayer.obj.getWorldDirection().x;
+          MyPlayer.obj.position.z -= MyPlayer.speed * MyPlayer.recoilTime * delta * MyPlayer.obj.getWorldDirection().z;
+          MyPlayer.recoilTime -= delta * 5;
+          MyPlayer.kulaPosition();
+          
+          var move = {
+            m: "r",
+            x: (MyPlayer.obj.getWorldDirection().x * delta * MyPlayer.recoilTime),
+            z: (MyPlayer.obj.getWorldDirection().z * delta * MyPlayer.recoilTime)
+          }
+
+          net.movePlayer(move);
+        }
+
+
         //------- Akcje dla klikniętych klawiszy --------------
 
         if (ui.map[87] && MyPlayer.recoilTime <= 0) { // przód: w
 
           MyPlayer.kolo1.rotation.z += 0.1;
           MyPlayer.kolo2.rotation.z += 0.1;
-          MyPlayer.obj.position.x += 500 * delta * MyPlayer.obj.getWorldDirection().x;
-          MyPlayer.obj.position.z += 500 * delta * MyPlayer.obj.getWorldDirection().z;
+
+          MyPlayer.obj.position.x += (MyPlayer.speed + (20 * MyPlayer.skillSpeed)) * delta * MyPlayer.obj.getWorldDirection().x;
+          MyPlayer.obj.position.z += (MyPlayer.speed + (20 * MyPlayer.skillSpeed)) * delta * MyPlayer.obj.getWorldDirection().z;
           MyPlayer.kulaPosition();
 
           var move = {
@@ -148,8 +157,8 @@ function Game() {
 
           MyPlayer.kolo1.rotation.z -= 0.1;
           MyPlayer.kolo2.rotation.z -= 0.1;
-          MyPlayer.obj.position.x -= 500 * delta * MyPlayer.obj.getWorldDirection().x;
-          MyPlayer.obj.position.z -= 500 * delta * MyPlayer.obj.getWorldDirection().z;
+          MyPlayer.obj.position.x -= (MyPlayer.speed + (20 * MyPlayer.skillSpeed)) * delta * MyPlayer.obj.getWorldDirection().x;
+          MyPlayer.obj.position.z -= (MyPlayer.speed + (20 * MyPlayer.skillSpeed)) * delta * MyPlayer.obj.getWorldDirection().z;
           MyPlayer.kulaPosition();
 
           var move = {
@@ -353,9 +362,9 @@ function Game() {
         Players[i].kula.armataShotAngle = Players[i].lufa.rotation.z;
         shotKule.push(Players[i].kula);
         Players[i].kula = null;
-        break;
-        //Players[i].recoilTime = 3;
-        //recoilPlayers.push(Players[i]);
+        if(id == MyPlayer.id){
+          MyPlayer.recoilTime = 3;
+        }
       }
     }
   }
@@ -385,6 +394,7 @@ function Game() {
         Players[i].skillSpeed = data[i].skillSpeed;
         Players[i].skillReload = data[i].skillReload;
         Players[i].skillPoints = data[i].skillPoints;
+        Players[i].speed = data[i].speed;
         Players[i].positionF();
         Players[i].rotateF();
         Players[i].rotateLufaF();
@@ -402,6 +412,7 @@ function Game() {
             Players[i].skillSpeed = data[i].skillSpeed;
             Players[i].skillReload = data[i].skillReload;
             Players[i].skillPoints = data[i].skillPoints;
+            Players[i].speed = data[i].speed;
             Players[i].positionF();
             Players[i].rotateF();
             Players[i].rotateLufaF();
@@ -501,6 +512,12 @@ function Game() {
           pl.kolo2.rotation.z += 0.1;
           pl.positionF();
         } else if (data.m == "s") {
+          pl.x = data.x;
+          pl.z = data.z;
+          pl.kolo1.rotation.z -= 0.1;
+          pl.kolo2.rotation.z -= 0.1;
+          pl.positionF();
+        } else if (data.m == "r") {
           pl.x = data.x;
           pl.z = data.z;
           pl.kolo1.rotation.z -= 0.1;
