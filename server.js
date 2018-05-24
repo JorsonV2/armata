@@ -63,13 +63,16 @@ server.listen(3000, function() {
 //server.listen(3000, '192.168.100.104');
 
 function Player(id, name) {
-  this.id = id;
-  this.name = name;
   this.x = Math.floor(Math.random() * 5000 - 2500)
   this.z = Math.floor(Math.random() * 5000 - 2500);
-  this.speed = 500;
   this.rotateArmata = 0;
   this.rotateLufa = Math.PI * 0.3;
+
+  this.id = id;
+  this.name = name;
+  this.hp = 100;
+  this.speed = 500;
+
   this.skillSpeed = 0;
   this.skillPower = 0;
   this.skillReload = 0;
@@ -129,6 +132,7 @@ io.sockets.on("connection", function(client) {
       }
     }
   });
+
   client.on("rp", function(data) {
     for (var i = 0; i < Players.length; i++) {
       if ((Players[i].id) == (client.id)) {
@@ -149,11 +153,18 @@ io.sockets.on("connection", function(client) {
     for (var i = 0; i < Players.length; i++) {
           var r = 750;
           var d = Math.sqrt(Math.pow((Players[i].x - data.x), 2) + Math.pow((Players[i].z - data.z), 2));
-          console.log(d);
           if (d < r) {
+            var x = 100 - (d / 750 * 100)
+            if(x > 90){
+              x = 100;
+            }
+            x = Players[i].hp -= x;
+            if(Players[i].hp <= 0){
+              x = "dead";
 
+            }
               io.sockets.to(Players[i].id).emit("d", {
-                status: "bum"
+                d: x
               });
           }
     }

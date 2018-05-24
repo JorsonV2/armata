@@ -8,11 +8,10 @@ function Game() {
   var Nicks = [];
   var allBum = [];
   var shotKule = [];
-  var imove = [];
   var MyPlayer;
   var scene = new THREE.Scene();
   //scene.fog = new THREE.FogExp2( 0xefd1b5, 0.00025 );
-  var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
+  var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 50000);
 
   this.round = function(n, k) {
     var factor = Math.pow(10, k);
@@ -53,7 +52,7 @@ function Game() {
         side: THREE.BackSide
       }));
 
-    var skyGeometry = new THREE.CubeGeometry(13000, 13000, 13000);
+    var skyGeometry = new THREE.CubeGeometry(50000, 50000, 50000);
     var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
     var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
     //skyBox.rotation.x += Math.PI / 2;
@@ -63,13 +62,13 @@ function Game() {
 
     var floorTexture = new THREE.ImageUtils.loadTexture('mats/grass3.jpg');
     floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-    floorTexture.repeat.set(300, 300);
+    floorTexture.repeat.set(150, 150);
     var floorMaterial = new THREE.MeshPhongMaterial({
       shininess: 1000,
       map: floorTexture,
       side: THREE.DoubleSide
     });
-    var floorGeometry = new THREE.PlaneGeometry(100000, 100000, 10, 10);
+    var floorGeometry = new THREE.PlaneGeometry(50000, 50000, 10, 10);
     var floor = new THREE.Mesh(floorGeometry, floorMaterial);
     floor.rotation.x = Math.PI / 2;
     scene.add(floor);
@@ -102,10 +101,10 @@ function Game() {
 
     //////////////////////////////////////////////////////////////////
 
-    for (var i = 0; i < 1000; i++) {
+    for (var i = 0; i < 5000; i++) {
       var grass = models.grass.clone();
-      grass.position.x = Math.floor(Math.random() * (10000 + 1) - 5000);
-      grass.position.z = Math.floor(Math.random() * (10000 + 1) - 5000);
+      grass.position.x = Math.floor(Math.random() * (50000 + 1) - 25000);
+      grass.position.z = Math.floor(Math.random() * (50000 + 1) - 25000);
       scene.add(grass)
     }
 
@@ -282,9 +281,7 @@ function Game() {
 
 
         if (kula.sphere.position.y < 0) {
-
           if(kula.owner.id == MyPlayer.id){
-            console.log(kula.bumPosition);
             var bum = {
               x: kula.bumPosition.x,
               z: kula.bumPosition.z
@@ -337,19 +334,18 @@ function Game() {
   init();
 
   //kontrola wysyłania poruszania się na serwer
-  setInterval(function() {
-    if ((imove.length != 0)) {
-      net.movePlayer(imove[imove.length - 1]);
-      imove = [];
-    }
-  }, 100);
+  // setInterval(function() {
+  //   if ((imove.length != 0)) {
+  //     net.movePlayer(imove[imove.length - 1]);
+  //     imove = [];
+  //   }
+  // }, 100);
 
   this.shotKula = function(id) {
     for (var i = 0; i < Players.length; i++) {
       if (Players[i].id == id) {
         power = Players[i].power;
         if (Players[i].lufa.rotation.z < 0.95) power = Players[i].power * (Players[i].lufa.rotation.z + 0.05);
-        console.log(target);
         Players[i].kula.bumPosition = target.target.position.clone();
         Players[i].kula.power = power;
         Players[i].kula.kulaShotPosition = Players[i].kula.sphere.position.clone();
