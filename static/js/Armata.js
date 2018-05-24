@@ -15,11 +15,7 @@ function Armata(data) {
 
   this.hp = 100;
   this.power = 150;
-<<<<<<< HEAD
-  this.speed;
-=======
   this.speed = 500;
->>>>>>> 9a70a5a477aeecbdd67e167bb07cd1a43739c6f0
   this.reload = 5;
   this.recoilTime = 0;
 
