@@ -1,9 +1,10 @@
-body{
-    margin: 0;
-    overflow: hidden;
-    text-align: center;
+body {
+  margin: 0;
+  overflow: hidden;
+  text-align: center;
 }
-#root{
+
+#root {
   position: absolute;
   top: 0;
   left: 0;
@@ -11,14 +12,16 @@ body{
   width: 100vw;
   z-index: 0;
 }
-#pause{
+
+#pause {
   position: absolute;
   top: 45vh;
   left: 45vw;
   border: 2px solid black;
   z-index: 4;
 }
-#control{
+
+#control {
   position: relative;
   display: none;
   top: 0;
@@ -29,7 +32,7 @@ body{
   opacity: 0.8;
 }
 
-#skill{
+#skill {
   position: absolute;
   top: 0;
   left: 0;
@@ -37,7 +40,8 @@ body{
   width: 10vw;
   height: auto;
 }
-#ranking{
+
+#ranking {
   position: absolute;
   top: 0;
   right: 0;
@@ -46,20 +50,18 @@ body{
   height: 25vw;
 }
 
-#bar{
-display: flex;
-flex-direction: column;
-align-items: center;
+#bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-#hp_bar{
+#hp_bar {
   /* Reset the default appearance */
   -webkit-appearance: none;
-   appearance: none;
-
+  appearance: none;
   width: 40vw;
   height: 4vh;
-
   border: 2px black solid;
   border-radius: 2px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
@@ -67,19 +69,16 @@ align-items: center;
 
 #hp_bar::-webkit-progress-value {
   background-color: red;
-
-    border-radius: 2px;
-    background-size: 35px 20px, 100% 100%, 100% 100%;
+  border-radius: 2px;
+  background-size: 35px 20px, 100% 100%, 100% 100%;
 }
 
-#reload_bar{
+#reload_bar {
   /* Reset the default appearance */
   -webkit-appearance: none;
-   appearance: none;
-
+  appearance: none;
   width: 40vw;
   height: 2vh;
-
   border: 1px black solid;
   border-radius: 2px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
@@ -87,7 +86,6 @@ align-items: center;
 
 #reload_bar::-webkit-progress-value {
   background-color: green;
-
-    border-radius: 2px;
-    background-size: 35px 20px, 100% 100%, 100% 100%;
+  border-radius: 2px;
+  background-size: 35px 20px, 100% 100%, 100% 100%;
 }
