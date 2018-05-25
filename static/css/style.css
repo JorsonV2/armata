@@ -14,11 +14,12 @@ body {
 }
 
 #pause {
-  position: absolute;
-  top: 45vh;
-  left: 45vw;
+  margin: 0 auto;
+  width: 7vw;
   border: 2px solid black;
   z-index: 4;
+  display: none;
+  overflow: hidden;
 }
 
 #control {
@@ -88,4 +89,22 @@ body {
   background-color: green;
   border-radius: 2px;
   background-size: 35px 20px, 100% 100%, 100% 100%;
+}
+#restart {
+  z-index: 4;
+  overflow: hidden;
+  width: 10vw;
+  border: 2px black solid;
+  display: none;
+  border-radius: 2px;
+  margin: 0 auto;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+#centerContener{
+  z-index: 4;
+  width: 100vw;
+  height: 80vh;
+  position: absolute;
+  top: 20vh;
 }

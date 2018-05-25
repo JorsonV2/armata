@@ -167,19 +167,29 @@ io.sockets.on("connection", function(client) {
             if(x > 90){
               x = 100;
             }
-            x = Players[i].hp -= x;
+            Players[i].hp -= x;
+            x = Players[i].hp;
+            
             if(Players[i].hp <= 0){
               x = "dead";
-
-            }
-              io.sockets.to(Players[i].id).emit("d", {
-                d: x
-              });
-              io.sockets.emit("o", {
-                id: Players[i].id,
-                x: Players[i].x - data.x,
-                z: Players[i].z - data.z
+              io.sockets.emit("k", {
+                id: Players[i].id
               })
+            }
+
+            io.sockets.to(Players[i].id).emit("d", {
+              d: x
+            });
+
+            io.sockets.emit("o", {
+              id: Players[i].id,
+              x: Players[i].x - data.x,
+              z: Players[i].z - data.z
+            })
+
+            if(Players[i].hp <= 0){
+              Players.splice(i, 1);
+            }
           }
     }
   });

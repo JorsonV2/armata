@@ -63,12 +63,7 @@ function Ui() {
       $("body").on("mousemove", UsePointerLock)
     else {
       $("body").off("mousemove", UsePointerLock)
-      $('<div id="pause"><h1>Pause</h1><button type="button" id="btn_pause">start!</button></div>').appendTo('body');
-      $("#btn_pause").on("click", function() {
-        element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
-        element.requestPointerLock(); // włączenie blokady kursora
-        $('#pause').remove();
-      });
+      $('#pause').css("display", "block")
     }
   };
 
@@ -95,7 +90,28 @@ function Ui() {
     game.returnMyPlayer().hp = data;
     $("#hp_bar").val(data);
   }
+
   this.changeReload = function(data) {
     $("#reload_bar").val(data);
   }
+
+  this.resetPlayer = function(){
+    net.new_user();
+    game.visableTarget(true);
+    this.changeHpPoints(100);
+  }
+
+  $("#revive").on("click", function(){
+    $("#restart").css("display", "none");
+    element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+    element.requestPointerLock(); // włączenie blokady kursora
+    $('#pause').css("display", "none")
+    that.resetPlayer();
+  })
+
+  $("#btn_pause").on("click", function() {
+    element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+    element.requestPointerLock(); // włączenie blokady kursora
+    $('#pause').css("display", "none")
+  });
 };

@@ -16,10 +16,15 @@ function Net() {
 
     client.on("d", function(data) {
       if (data.d == "dead") {
-        console.log("umarłeś");
+        $("#restart").css("display", "block");
+        game.visableTarget(false);
       } else {
         ui.changeHpPoints(data.d);
       }
+    })
+
+    client.on("k", function(data){
+      game.removePlayer(data.id);
     })
 
     client.on("sp", function(data) {
@@ -66,6 +71,10 @@ function Net() {
 
   this.id = function() {
     return (client.id);
+  }
+
+  this.new_user = function(){
+    client.emit("new_user", $('#tb_login').val(), function(data) {});
   }
 
 }

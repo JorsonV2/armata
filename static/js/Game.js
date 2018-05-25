@@ -13,6 +13,11 @@ function Game() {
   //scene.fog = new THREE.FogExp2( 0xefd1b5, 0.00025 );
   var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 50000);
 
+  target = new Target();
+  var flightLine = new FlightLine();
+  scene.add(target.target);
+  scene.add(flightLine.flightLine);
+
   this.round = function(n, k) {
     var factor = Math.pow(10, k);
     return Math.round(n * factor) / factor;
@@ -31,7 +36,7 @@ function Game() {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    $('#start').remove();
+    $('#start').css("display", "none");
     $('<div id="root"></div>').appendTo('body');
     $("#root").append(renderer.domElement);
 
@@ -79,10 +84,6 @@ function Game() {
     ////////////
 
     //------- Poruszanie kamerą oraz celownikiem --------------
-    target = new Target();
-    var flightLine = new FlightLine();
-    scene.add(target.target);
-    scene.add(flightLine.flightLine);
 
     //////////////////////////////////////////////////////////////////////////////////////////
     //test swiatł
@@ -290,7 +291,7 @@ function Game() {
         /////////////// Usinięcie kuli, dodanie nowej, dodanie wybuchu ///////////////////////
 
 
-        if (kula.sphere.position.y < 0) {
+        if (kula.sphere.position.y < 0 && MyPlayer) {
           if(kula.owner.id == MyPlayer.id){
             var bum = {
               x: kula.bumPosition.x,
@@ -376,10 +377,16 @@ function Game() {
   this.removePlayer = function(id) {
     for (var i = 0; i < Players.length; i++) {
       if ((Players[i].id) == (id)) {
-        scene.remove(Players[i].obj)
-        scene.remove(Players[i].kula.sphere);
-        Players.splice(i, 1);
-        break;
+
+          scene.remove(Players[i].obj)
+          scene.remove(Players[i].kula.sphere);
+          Players.splice(i, 1);
+
+          if(id == MyPlayer.id)
+            MyPlayer = null;
+
+          break;
+
       }
     }
     MyPlayerUpdate();
@@ -528,6 +535,11 @@ function Game() {
         break;
       }
     }
+  }
+
+  this.visableTarget = function(visable){
+    target.target.visible = visable;
+    flightLine.flightLine.visible = visable;
   }
 
   function MyPlayerUpdate() {
